@@ -61,7 +61,7 @@ const Header = () => {
             className="flex items-center transition-transform duration-300 hover:scale-105"
           >
             <span className="text-xl font-bold tracking-tight text-primary">
-              Abu<span className="text-accent">Connect</span>
+              Local<span className="text-accent">CommunityEngagement</span>
             </span>
           </Link>
 
