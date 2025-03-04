@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect } from "react";
 import { Search, ArrowRight, MapPin, Bell, CalendarDays, Briefcase } from "lucide-react";
-import Button from "@/components/ui/Button";
 import AnimatedIcon from "@/components/ui/AnimatedIcon";
+import { Button } from "../ui/Button";
 
 const Hero = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -58,12 +58,10 @@ const Hero = () => {
               />
               <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5">
                 <Button
-                  variant="accent"
                   size="sm"
                   className="inline-flex items-center rounded-lg px-4"
-                  rightIcon={<ArrowRight className="h-4 w-4" />}
                 >
-                  Search
+                  Search <ArrowRight className="h-4 w-4" />
                 </Button>
               </div>
             </div>

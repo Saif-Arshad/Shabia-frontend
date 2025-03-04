@@ -2,8 +2,8 @@
 import React, { useState } from "react";
 import { MapPin, Star, Phone, Clock, Filter, Search } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/Card";
-import Badge from "@/components/ui/Badge";
-import Button from "@/components/ui/Button";
+import { Badge } from "../ui/Badge";
+import { Button } from "../ui/Button";
 
 const categories = [
   "All",
@@ -106,8 +106,8 @@ const ServiceCard = ({ service }: { service: typeof servicesData[0] }) => (
       </div>
     </CardContent>
     <CardFooter>
-      <Button variant="default" fullWidth rightIcon={<MapPin className="h-4 w-4" />}>
-        View Details
+      <Button variant="default"  >
+        View Details <MapPin className="h-4 w-4" />
       </Button>
     </CardFooter>
   </Card>
@@ -165,7 +165,7 @@ const ServicesDirectory = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 3xl:grid-cols-4 gap-8">
         {filteredServices.map((service) => (
           <div 
             key={service.id} 
@@ -180,9 +180,8 @@ const ServicesDirectory = () => {
         <Button 
           variant="outline"
           size="lg" 
-          rightIcon={<Filter className="h-4 w-4" />}
         >
-          Browse All Services
+          Browse All Services <Filter className="h-4 w-4" />
         </Button>
       </div>
     </section>

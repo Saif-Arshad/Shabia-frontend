@@ -2,8 +2,8 @@
 import React from "react";
 import { Calendar, Clock, MapPin, Users, CalendarDays, PlusCircle } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/Card";
-import Badge from "@/components/ui/Badge";
-import Button from "@/components/ui/Button";
+import { Badge } from "../ui/Badge";
+import { Button } from "../ui/Button";
 
 const eventsData = [
   {
@@ -82,7 +82,7 @@ const EventCard = ({ event }: { event: typeof eventsData[0] }) => (
               {event.location}
             </div>
           </div>
-          <Button variant="default" fullWidth>
+          <Button variant="default">
             RSVP Now
           </Button>
         </CardFooter>
@@ -116,17 +116,14 @@ const EventsSection = () => {
         <Button 
           variant="outline" 
           size="lg" 
-          rightIcon={<CalendarDays className="h-4 w-4" />}
         >
-          View All Events
+          View All Events <CalendarDays className="h-4 w-4" />
         </Button>
         <Button 
-          variant="accent" 
           size="lg" 
           className="ml-4" 
-          rightIcon={<PlusCircle className="h-4 w-4" />}
         >
-          Add Your Event
+          Add Your Event <PlusCircle className="h-4 w-4" />
         </Button>
       </div>
     </section>

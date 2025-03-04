@@ -2,8 +2,8 @@
 import React, { useState } from "react";
 import { Briefcase, MapPin, Building, Clock, Filter, Search, BookOpen } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/Card";
-import Badge from "@/components/ui/Badge";
-import Button from "@/components/ui/Button";
+import { Badge } from "../ui/Badge";
+import { Button } from "../ui/Button";
 
 const categories = [
   "All",
@@ -85,8 +85,6 @@ const JobCard = ({ job }: { job: typeof jobsData[0] }) => (
           </div>
         </div>
         <Badge 
-          variant={typeColors[job.type as keyof typeof typeColors] as any} 
-          size="sm"
         >
           {job.type}
         </Badge>
@@ -110,11 +108,11 @@ const JobCard = ({ job }: { job: typeof jobsData[0] }) => (
       </div>
     </CardContent>
     <CardFooter className="flex justify-between">
-      <Badge variant="outline" size="sm">
+      <Badge variant="outline" >
         {job.category}
       </Badge>
-      <Button variant="default" size="sm" rightIcon={<BookOpen className="h-4 w-4" />}>
-        Apply Now
+      <Button variant="default" size="sm" >
+        Apply Now <BookOpen className="h-4 w-4" />
       </Button>
     </CardFooter>
   </Card>
@@ -188,17 +186,14 @@ const JobBoard = () => {
         <Button 
           variant="outline" 
           size="lg" 
-          rightIcon={<Filter className="h-4 w-4" />}
         >
-          Browse All Jobs
-        </Button>
+          Browse All Jobs <Filter className="h-4 w-4" />
+        </Button> 
         <Button 
-          variant="accent" 
           size="lg" 
           className="ml-4" 
-          rightIcon={<Briefcase className="h-4 w-4" />}
         >
-          Post a Job
+          Post a Job <Briefcase className="h-4 w-4" />
         </Button>
       </div>
     </section>

@@ -1,9 +1,9 @@
 
 import React, { useState } from "react";
 import { Clock, User, Tag, MessageCircle, ThumbsUp, Share2 } from "lucide-react";
-import Badge from "@/components/ui/Badge";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/Card";
-import Button from "@/components/ui/Button";
+import { Badge } from "../ui/Badge";
+import { Button } from "../ui/Button";
 
 const newsData = [
   {
@@ -73,25 +73,7 @@ const NewsCard = ({ news }: { news: typeof newsData[0] }) => {
       <CardContent>
         <CardDescription>{news.description}</CardDescription>
       </CardContent>
-      <CardFooter className="justify-between border-t pt-4">
-        <div className="flex items-center space-x-4">
-          <button 
-            className={`flex items-center text-sm ${liked ? 'text-blue-500' : 'text-muted-foreground'} hover:text-blue-500 transition-colors`}
-            onClick={() => setLiked(!liked)}
-          >
-            <ThumbsUp className="mr-1 h-4 w-4" />
-            <span>{liked ? news.likes + 1 : news.likes}</span>
-          </button>
-          <button className="flex items-center text-sm text-muted-foreground hover:text-primary transition-colors">
-            <MessageCircle className="mr-1 h-4 w-4" />
-            <span>{news.comments}</span>
-          </button>
-        </div>
-        <button className="flex items-center text-sm text-muted-foreground hover:text-primary transition-colors">
-          <Share2 className="mr-1 h-4 w-4" />
-          <span>Share</span>
-        </button>
-      </CardFooter>
+     
     </Card>
   );
 };
@@ -121,9 +103,8 @@ const NewsFeed = () => {
         <Button 
           variant="outline" 
           size="lg" 
-          rightIcon={<Tag className="h-4 w-4" />}
         >
-          View All News
+          View All News <Tag className="h-4 w-4" />
         </Button>
       </div>
     </section>
