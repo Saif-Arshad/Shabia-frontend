@@ -28,42 +28,8 @@ const servicesData = [
     reviews: 124,
     image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c"
   },
-  {
-    id: 2,
-    name: "Zayed Learning Center",
-    category: "Education",
-    description: "Quality education and tutoring services for all levels",
-    address: "Al Bateen, Abu Dhabi",
-    phone: "+971 02 987 6543",
-    hours: "8:00 AM - 6:00 PM",
-    rating: 4.6,
-    reviews: 87,
-    image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b"
-  },
-  {
-    id: 3,
-    name: "Marina Restaurant",
-    category: "Restaurants",
-    description: "Authentic Emirati cuisine with a modern twist",
-    address: "Corniche, Abu Dhabi",
-    phone: "+971 02 456 7890",
-    hours: "11:00 AM - 11:00 PM",
-    rating: 4.9,
-    reviews: 215,
-    image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81"
-  },
-  {
-    id: 4,
-    name: "Gulf Supermarket",
-    category: "Retail",
-    description: "Wide selection of groceries and household products",
-    address: "Khalidiya, Abu Dhabi",
-    phone: "+971 02 345 6789",
-    hours: "7:00 AM - 12:00 AM",
-    rating: 4.5,
-    reviews: 156,
-    image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7"
-  },
+
+ 
 ];
 
 const ServiceCard = ({ service }: { service: typeof servicesData[0] }) => (

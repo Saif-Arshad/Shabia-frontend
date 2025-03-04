@@ -16,42 +16,8 @@ const categories = [
 ];
 
 const jobsData = [
-  {
-    id: 1,
-    title: "Frontend Developer",
-    company: "TechHub Solutions",
-    location: "Al Reem Island, Abu Dhabi",
-    type: "Full-time",
-    category: "IT & Software",
-    salary: "AED 12,000 - 15,000 / month",
-    posted: "3 days ago",
-    deadline: "June 30, 2023",
-    description: "We are looking for a skilled Frontend Developer proficient in React, JavaScript, and CSS to join our growing team.",
-  },
-  {
-    id: 2,
-    title: "Math Teacher",
-    company: "International Academy",
-    location: "Khalifa City, Abu Dhabi",
-    type: "Full-time",
-    category: "Education",
-    salary: "AED 10,000 - 13,000 / month",
-    posted: "1 week ago",
-    deadline: "July 15, 2023",
-    description: "Seeking a qualified Math Teacher with experience in teaching secondary school students using modern pedagogical methods.",
-  },
-  {
-    id: 3,
-    title: "Marketing Specialist",
-    company: "Global Retail Group",
-    location: "Al Maryah Island, Abu Dhabi",
-    type: "Part-time",
-    category: "Marketing",
-    salary: "AED 8,000 - 10,000 / month",
-    posted: "2 days ago",
-    deadline: "June 25, 2023",
-    description: "Join our marketing team to develop and implement marketing strategies for our retail brands across the UAE.",
-  },
+ 
+ 
   {
     id: 4,
     title: "Civil Engineer",

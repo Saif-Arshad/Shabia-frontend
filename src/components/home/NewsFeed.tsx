@@ -18,30 +18,7 @@ const newsData = [
     likes: 24,
     comments: 8,
   },
-  {
-    id: 2,
-    title: "Road Closure Alert: Al Nahyan Area",
-    description:
-      "Due to ongoing infrastructure improvements, several roads in Al Nahyan area will be closed during weekends for the next month. Plan your routes accordingly.",
-    image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
-    category: "Traffic Updates",
-    author: "Mohammed Kareem",
-    date: "5 hours ago",
-    likes: 18,
-    comments: 12,
-  },
-  {
-    id: 3,
-    title: "Local Business Spotlight: Cafe Arabica",
-    description:
-      "Cafe Arabica, a locally-owned coffee shop, is celebrating its grand opening this weekend with special offers and live music performances.",
-    image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
-    category: "Business",
-    author: "Fatima Al Hashemi",
-    date: "Yesterday",
-    likes: 42,
-    comments: 5,
-  },
+
 ];
 
 const NewsCard = ({ news }: { news: typeof newsData[0] }) => {

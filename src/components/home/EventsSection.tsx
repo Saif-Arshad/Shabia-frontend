@@ -6,28 +6,7 @@ import { Badge } from "../ui/Badge";
 import { Button } from "../ui/Button";
 
 const eventsData = [
-  {
-    id: 1,
-    title: "Community Clean-up Drive",
-    description: "Join us for a community initiative to clean up Al Reem Island beaches and surrounding areas.",
-    date: "June 15, 2023",
-    time: "8:00 AM - 11:00 AM",
-    location: "Al Reem Island Beach",
-    attendees: 45,
-    category: "Environmental",
-    image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b"
-  },
-  {
-    id: 2,
-    title: "Cultural Festival",
-    description: "Celebrate the diverse cultures of Abu Dhabi with food, music, and performances.",
-    date: "June 22-24, 2023",
-    time: "4:00 PM - 10:00 PM",
-    location: "Corniche Public Park",
-    attendees: 120,
-    category: "Cultural",
-    image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81"
-  },
+
   {
     id: 3,
     title: "Tech Startup Networking",
