@@ -81,14 +81,14 @@ const EventsSection = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {eventsData.map((event) => (
+        {/* {eventsData.map((event) => (
           <div 
             key={event.id} 
             className="h-full transform transition-all duration-300 hover:-translate-y-1"
           >
             <EventCard event={event} />
           </div>
-        ))}
+        ))} */}
       </div>
 
       <div className="mt-12 text-center">

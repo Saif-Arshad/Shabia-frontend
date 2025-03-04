@@ -132,14 +132,14 @@ const ServicesDirectory = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 3xl:grid-cols-4 gap-8">
-        {filteredServices.map((service) => (
+        {/* {filteredServices.map((service) => (
           <div 
             key={service.id} 
             className="transform transition-all duration-300 hover:-translate-y-1"
           >
             <ServiceCard service={service} />
           </div>
-        ))}
+        ))} */}
       </div>
 
       <div className="mt-12 text-center">

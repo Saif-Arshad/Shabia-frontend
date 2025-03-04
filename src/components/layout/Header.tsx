@@ -61,7 +61,7 @@ const Header = () => {
             className="flex items-center transition-transform duration-300 hover:scale-105"
           >
             <span className="text-xl font-bold tracking-tight text-primary">
-              Local<span className="text-accent">CommunityEngagement</span>
+              Furjan<span className="text-accent"></span>
             </span>
           </Link>
 
