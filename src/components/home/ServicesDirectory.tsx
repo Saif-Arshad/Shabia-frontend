@@ -27,8 +27,6 @@ const servicesData = [
     reviews: 124,
     image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c"
   },
-
- 
 ];
 
 const ServiceCard = ({ service }: { service: typeof servicesData[0] }) => (
