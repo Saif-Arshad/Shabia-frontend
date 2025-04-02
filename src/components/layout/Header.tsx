@@ -1,8 +1,7 @@
-
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { MenuIcon, X, Search, MapPin, Bell, Calendar, BriefcaseIcon } from "lucide-react";
+import { MenuIcon, X, Search, MapPin, Bell, Calendar, BriefcaseIcon, User } from "lucide-react";
 
 interface NavItemProps {
   href: string;
@@ -61,26 +60,29 @@ const Header = () => {
             className="flex items-center transition-transform duration-300 hover:scale-105"
           >
             <span className="text-xl font-bold tracking-tight text-primary">
-              Furjan<span className="text-accent"></span>
+              Shabia<span className="text-accent"></span>
             </span>
           </Link>
 
         
           <div className="flex items-center">
-          <nav className="hidden md:flex items-center space-x-1">
-            <NavItem href="/" icon={<MapPin className="w-4 h-4" />}>
-              Local Services
-            </NavItem>
-            <NavItem href="/" icon={<Bell className="w-4 h-4" />}>
-              News
-            </NavItem>
-            <NavItem href="/" icon={<Calendar className="w-4 h-4" />}>
-              Events
-            </NavItem>
-            <NavItem href="/" icon={<BriefcaseIcon className="w-4 h-4" />}>
-              Jobs
-            </NavItem>
-          </nav>
+            <nav className="hidden md:flex items-center space-x-1">
+              <NavItem href="/" icon={<MapPin className="w-4 h-4" />}>
+                Local Services
+              </NavItem>
+              <NavItem href="/" icon={<Bell className="w-4 h-4" />}>
+                News
+              </NavItem>
+              <NavItem href="/" icon={<Calendar className="w-4 h-4" />}>
+                Events
+              </NavItem>
+              <NavItem href="/" icon={<BriefcaseIcon className="w-4 h-4" />}>
+                Jobs
+              </NavItem>
+              <NavItem href="/login" icon={<User className="w-4 h-4" />}>
+                Login
+              </NavItem>
+            </nav>
            
 
             {/* Mobile menu button */}
@@ -135,6 +137,13 @@ const Header = () => {
           >
             <BriefcaseIcon className="w-5 h-5 mr-3 text-accent" />
             Jobs
+          </Link>
+          <Link
+            to="/login"
+            className="flex items-center px-3 py-3 text-base font-medium rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150"
+          >
+            <User className="w-5 h-5 mr-3 text-accent" />
+            Login
           </Link>
         </div>
       </div>

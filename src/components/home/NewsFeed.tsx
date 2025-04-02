@@ -1,9 +1,9 @@
 
 import React, { useState } from "react";
 import { Clock, User, Tag, MessageCircle, ThumbsUp, Share2 } from "lucide-react";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/Card";
-import { Badge } from "../ui/Badge";
-import { Button } from "../ui/Button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/custom/Card";
+import { Badge } from "@/components/custom/Badge";
+import { Button } from "@/components/custom/Button";
 
 const newsData = [
   {
@@ -18,7 +18,6 @@ const newsData = [
     likes: 24,
     comments: 8,
   },
-
 ];
 
 const NewsCard = ({ news }: { news: typeof newsData[0] }) => {
@@ -39,7 +38,7 @@ const NewsCard = ({ news }: { news: typeof newsData[0] }) => {
         </div>
       </div>
       <CardHeader className="pt-5">
-        <div className="flex items-center text-sm text-muted-foreground mb-2">
+        <div className="flex items-center text-sm text-gray-500 mb-2">
           <User className="mr-1 h-3 w-3" />
           <span className="mr-3">{news.author}</span>
           <Clock className="mr-1 h-3 w-3" />
@@ -50,7 +49,6 @@ const NewsCard = ({ news }: { news: typeof newsData[0] }) => {
       <CardContent>
         <CardDescription>{news.description}</CardDescription>
       </CardContent>
-     
     </Card>
   );
 };
