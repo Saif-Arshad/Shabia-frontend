@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { MenuIcon, X, Search, MapPin, Bell, Calendar, BriefcaseIcon, User } from "lucide-react";
+import useAuth from "@/hooks/useUser";
 
 interface NavItemProps {
   href: string;
@@ -32,7 +33,8 @@ const NavItem = ({ href, children, icon }: NavItemProps) => {
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
+  const { token,user} = useAuth()
+  console.log("🚀 ~ Header ~ user:", user)
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
@@ -42,7 +44,15 @@ const Header = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
+  const getInitials = (name) => {
+    if (!name) return "";
+    const nameParts = name.split(" ");
+    if (nameParts.length === 1) return nameParts[0].charAt(0).toUpperCase();
+    return (
+      nameParts[0].charAt(0).toUpperCase() +
+      nameParts[1].charAt(0).toUpperCase()
+    );
+  };
   return (
     <header
       className={cn(
@@ -65,7 +75,6 @@ const Header = () => {
           </Link>
 
         
-          <div className="flex items-center">
             <nav className="hidden md:flex items-center space-x-1">
               <NavItem href="/" icon={<MapPin className="w-4 h-4" />}>
                 Local Services
@@ -79,10 +88,25 @@ const Header = () => {
               <NavItem href="/" icon={<BriefcaseIcon className="w-4 h-4" />}>
                 Jobs
               </NavItem>
-              <NavItem href="/login" icon={<User className="w-4 h-4" />}>
-                Login
-              </NavItem>
             </nav>
+          <div className="flex items-center">
+            {user ? (
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
+                  {getInitials(user.name)}
+                </div>
+                <span className="capitalize">{user.name}</span>
+              </div>
+            ) : (
+              <>
+                <NavItem href="/register" icon={<User className="w-4 h-4" />}>
+                  Register
+                </NavItem>
+                <NavItem href="/login" icon={<User className="w-4 h-4" />}>
+                  Login
+                </NavItem>
+              </>
+            )}
            
 
             {/* Mobile menu button */}

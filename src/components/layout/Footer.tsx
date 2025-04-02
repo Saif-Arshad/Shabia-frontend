@@ -7,11 +7,11 @@ const Footer = () => {
   return (
     <footer className="bg-slate-50 dark:bg-slate-900/50 border-t border-slate-200 dark:border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <div className="space-y-4">
             <Link to="/" className="inline-flex">
               <span className="text-xl font-bold tracking-tight text-primary">
-                Furjan<span className="text-accent"></span>
+                Shabia<span className="text-accent"></span>
               </span>
             </Link>
             <p className="text-sm text-muted-foreground">
@@ -89,45 +89,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">
-              About
-            </h3>
-            <ul className="space-y-2">
-              <li>
-                <Link
-                  to="/"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Our Mission
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Team
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Terms of Service
-                </Link>
-              </li>
-            </ul>
-          </div>
+       
 
           <div>
             <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">
