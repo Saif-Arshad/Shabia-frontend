@@ -1,13 +1,12 @@
-
 import React, { useState } from "react";
 import { Briefcase, MapPin, Building, Clock, Filter, Search, BookOpen } from "lucide-react";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/Card";
-import { Badge } from "../ui/Badge";
-import { Button } from "../ui/Button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 const categories = [
   "All",
-  "IT & Software",
+  "IT & Software", 
   "Engineering",
   "Education",
   "Healthcare",
@@ -16,8 +15,6 @@ const categories = [
 ];
 
 const jobsData = [
- 
- 
   {
     id: 4,
     title: "Civil Engineer",

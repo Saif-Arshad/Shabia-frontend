@@ -1,15 +1,13 @@
-
 import React, { useState, useEffect } from "react";
 import { Search, ArrowRight, MapPin, Bell, CalendarDays, Briefcase } from "lucide-react";
 import AnimatedIcon from "@/components/ui/AnimatedIcon";
-import { Button } from "../ui/Button";
+import { Button } from "@/components/ui/button";
 
 const Hero = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Adding a slight delay to the animation for better visual effect
     const timer = setTimeout(() => {
       setIsVisible(true);
     }, 100);

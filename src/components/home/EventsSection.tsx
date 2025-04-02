@@ -1,12 +1,10 @@
-
 import React from "react";
 import { Calendar, Clock, MapPin, Users, CalendarDays, PlusCircle } from "lucide-react";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/Card";
-import { Badge } from "../ui/Badge";
-import { Button } from "../ui/Button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 const eventsData = [
-
   {
     id: 3,
     title: "Tech Startup Networking",
