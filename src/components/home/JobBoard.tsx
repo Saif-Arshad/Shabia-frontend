@@ -138,14 +138,14 @@ const JobBoard = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* {filteredJobs.map((job) => (
+        {filteredJobs.map((job) => (
           <div 
             key={job.id} 
             className="transform transition-all duration-300 hover:-translate-y-1"
           >
             <JobCard job={job} />
           </div>
-        ))} */}
+        ))}
       </div>
 
       <div className="mt-12 text-center">

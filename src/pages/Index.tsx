@@ -19,12 +19,12 @@ const Index = () => {
       <Header />
       <main className="flex-grow">
         <Hero />
-        {/* <ServicesDirectory />
+        <ServicesDirectory />
         <NewsFeed />
         <EventsSection />
-        <JobBoard /> */}
+        <JobBoard />
       </main>
-      {/* <Footer /> */}
+      <Footer />
     </div>
   );
 };

@@ -65,7 +65,8 @@ const Header = () => {
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
+        
+          <div className="flex items-center">
           <nav className="hidden md:flex items-center space-x-1">
             <NavItem href="/" icon={<MapPin className="w-4 h-4" />}>
               Local Services
@@ -80,15 +81,7 @@ const Header = () => {
               Jobs
             </NavItem>
           </nav>
-
-          {/* Search and menu buttons */}
-          <div className="flex items-center">
-            <button
-              className="p-2 ml-3 text-gray-500 rounded-full transition duration-200 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary"
-              aria-label="Search"
-            >
-              <Search className="w-5 h-5" />
-            </button>
+           
 
             {/* Mobile menu button */}
             <button
