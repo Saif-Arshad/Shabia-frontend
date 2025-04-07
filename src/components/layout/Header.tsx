@@ -1,8 +1,16 @@
+
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { MenuIcon, X, Search, MapPin, Bell, Calendar, BriefcaseIcon, User } from "lucide-react";
-import useAuth from "@/hooks/useUser";
+import { MenuIcon, X, Search, MapPin, Bell, Calendar, BriefcaseIcon, User, LogOut, Settings, PlusCircle } from "lucide-react";
+import useAuth from "@/hooks/useAuth";
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuSeparator, 
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
 
 interface NavItemProps {
   href: string;
@@ -33,8 +41,8 @@ const NavItem = ({ href, children, icon }: NavItemProps) => {
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { token,user} = useAuth()
-  console.log("🚀 ~ Header ~ user:", user)
+  const { user } = useAuth();
+  
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
@@ -44,6 +52,7 @@ const Header = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+  
   const getInitials = (name) => {
     if (!name) return "";
     const nameParts = name.split(" ");
@@ -53,6 +62,7 @@ const Header = () => {
       nameParts[1].charAt(0).toUpperCase()
     );
   };
+  
   return (
     <header
       className={cn(
@@ -74,29 +84,52 @@ const Header = () => {
             </span>
           </Link>
 
-        
-            <nav className="hidden md:flex items-center space-x-1">
-              <NavItem href="/" icon={<MapPin className="w-4 h-4" />}>
-                Local Services
-              </NavItem>
-              <NavItem href="/" icon={<Bell className="w-4 h-4" />}>
-                News
-              </NavItem>
-              <NavItem href="/" icon={<Calendar className="w-4 h-4" />}>
-                Events
-              </NavItem>
-              <NavItem href="/" icon={<BriefcaseIcon className="w-4 h-4" />}>
-                Jobs
-              </NavItem>
-            </nav>
+          <nav className="hidden md:flex items-center space-x-1">
+            <NavItem href="/local-services" icon={<MapPin className="w-4 h-4" />}>
+              Local Services
+            </NavItem>
+            <NavItem href="/" icon={<Bell className="w-4 h-4" />}>
+              News
+            </NavItem>
+            <NavItem href="/" icon={<Calendar className="w-4 h-4" />}>
+              Events
+            </NavItem>
+            <NavItem href="/" icon={<BriefcaseIcon className="w-4 h-4" />}>
+              Jobs
+            </NavItem>
+          </nav>
+            
           <div className="flex items-center">
             {user ? (
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
-                  {getInitials(user.name)}
-                </div>
-                <span className="capitalize">{user.name}</span>
-              </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="flex items-center space-x-2 focus:outline-none">
+                  <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
+                    {getInitials(user.name)}
+                  </div>
+                  <span className="capitalize hidden sm:inline-block">{user.name}</span>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuItem className="cursor-pointer" asChild>
+                    <Link to="/dashboard">
+                      <User className="mr-2 h-4 w-4" /> Dashboard
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="cursor-pointer" asChild>
+                    <Link to="/dashboard/services/new">
+                      <PlusCircle className="mr-2 h-4 w-4" /> Add Service
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="cursor-pointer" asChild>
+                    <Link to="/dashboard?tab=profile">
+                      <Settings className="mr-2 h-4 w-4" /> Settings
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem className="cursor-pointer">
+                    <LogOut className="mr-2 h-4 w-4" /> Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : (
               <>
                 <NavItem href="/register" icon={<User className="w-4 h-4" />}>
@@ -107,7 +140,6 @@ const Header = () => {
                 </NavItem>
               </>
             )}
-           
 
             {/* Mobile menu button */}
             <button
@@ -135,7 +167,7 @@ const Header = () => {
       >
         <div className="px-2 pt-2 pb-3 space-y-1">
           <Link
-            to="/"
+            to="/local-services"
             className="flex items-center px-3 py-3 text-base font-medium rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150"
           >
             <MapPin className="w-5 h-5 mr-3 text-accent" />
@@ -162,13 +194,39 @@ const Header = () => {
             <BriefcaseIcon className="w-5 h-5 mr-3 text-accent" />
             Jobs
           </Link>
-          <Link
-            to="/login"
-            className="flex items-center px-3 py-3 text-base font-medium rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150"
-          >
-            <User className="w-5 h-5 mr-3 text-accent" />
-            Login
-          </Link>
+          
+          {user ? (
+            <>
+              <Link
+                to="/dashboard"
+                className="flex items-center px-3 py-3 text-base font-medium rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150"
+              >
+                <User className="w-5 h-5 mr-3 text-accent" />
+                Dashboard
+              </Link>
+              <Link
+                to="/dashboard/services/new"
+                className="flex items-center px-3 py-3 text-base font-medium rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150"
+              >
+                <PlusCircle className="w-5 h-5 mr-3 text-accent" />
+                Add Service
+              </Link>
+              <div
+                className="flex items-center px-3 py-3 text-base font-medium rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150"
+              >
+                <LogOut className="w-5 h-5 mr-3 text-accent" />
+                Logout
+              </div>
+            </>
+          ) : (
+            <Link
+              to="/login"
+              className="flex items-center px-3 py-3 text-base font-medium rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150"
+            >
+              <User className="w-5 h-5 mr-3 text-accent" />
+              Login
+            </Link>
+          )}
         </div>
       </div>
     </header>
