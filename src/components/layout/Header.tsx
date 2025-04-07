@@ -114,16 +114,7 @@ const Header = () => {
                       <User className="mr-2 h-4 w-4" /> Dashboard
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="cursor-pointer" asChild>
-                    <Link to="/dashboard/services/new">
-                      <PlusCircle className="mr-2 h-4 w-4" /> Add Service
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="cursor-pointer" asChild>
-                    <Link to="/dashboard?tab=profile">
-                      <Settings className="mr-2 h-4 w-4" /> Settings
-                    </Link>
-                  </DropdownMenuItem>
+                 
                   <DropdownMenuSeparator />
                   <DropdownMenuItem className="cursor-pointer">
                     <LogOut className="mr-2 h-4 w-4" /> Logout
