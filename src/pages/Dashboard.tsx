@@ -1,20 +1,15 @@
 
-import React, { useState } from "react";
-import { PlusCircle, ListFilter, Search, Calendar, Settings, User, Briefcase, MapPin } from "lucide-react";
+import React from "react";
 import { Link } from "react-router-dom";
+import { Briefcase, Settings, User, MapPin } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import useAuth from "@/hooks/useAuth";
 
 const Dashboard = () => {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState("services");
-
-  const userServices = [];
 
   if (!user) {
     return (
@@ -45,18 +40,52 @@ const Dashboard = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Link to="/admin/users" className="block">
+            <Link to="/dashboard/services" className="block">
               <Card className="h-full transition-all hover:shadow-md">
                 <CardHeader>
                   <CardTitle className="flex items-center">
-                    <Briefcase className="mr-2 h-5 w-5 text-mathpath-purple" />
+                    <Briefcase className="mr-2 h-5 w-5 text-primary" />
                     Manage Services
                   </CardTitle>
-                  <CardDescription>View and manage Services</CardDescription>
+                  <CardDescription>View and manage your services</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-gray-500">
-                    View , Delete , Add and edit your Services
+                    Add, edit, delete and view your published services
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
+            
+            <Link to="/dashboard" className="block">
+              <Card className="h-full transition-all hover:shadow-md">
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <User className="mr-2 h-5 w-5 text-primary" />
+                    Profile Settings
+                  </CardTitle>
+                  <CardDescription>Manage your profile</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-500">
+                    Update your personal information and preferences
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
+            
+            <Link to="/dashboard" className="block">
+              <Card className="h-full transition-all hover:shadow-md">
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <MapPin className="mr-2 h-5 w-5 text-primary" />
+                    Service Locations
+                  </CardTitle>
+                  <CardDescription>Manage service areas</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-500">
+                    Define the locations where your services are available
                   </p>
                 </CardContent>
               </Card>

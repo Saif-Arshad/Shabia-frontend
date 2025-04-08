@@ -11,6 +11,7 @@ import NotFound from "./pages/NotFound";
 import LocalServices from "./pages/LocalServices";
 import Dashboard from "./pages/Dashboard";
 import NewService from "./pages/NewService";
+import Services from "./pages/Services";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ const App = () => (
           <Route path="/register" element={<Register />} />
           <Route path="/local-services" element={<LocalServices />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard/services" element={<Services />} />
           <Route path="/dashboard/services/new" element={<NewService />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
