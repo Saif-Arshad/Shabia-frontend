@@ -56,40 +56,7 @@ const Dashboard = () => {
                 </CardContent>
               </Card>
             </Link>
-            
-            <Link to="/dashboard" className="block">
-              <Card className="h-full transition-all hover:shadow-md">
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <User className="mr-2 h-5 w-5 text-primary" />
-                    Profile Settings
-                  </CardTitle>
-                  <CardDescription>Manage your profile</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-gray-500">
-                    Update your personal information and preferences
-                  </p>
-                </CardContent>
-              </Card>
-            </Link>
-            
-            <Link to="/dashboard" className="block">
-              <Card className="h-full transition-all hover:shadow-md">
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <MapPin className="mr-2 h-5 w-5 text-primary" />
-                    Service Locations
-                  </CardTitle>
-                  <CardDescription>Manage service areas</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-gray-500">
-                    Define the locations where your services are available
-                  </p>
-                </CardContent>
-              </Card>
-            </Link>
+         
           </div>
         </div>
       </main>

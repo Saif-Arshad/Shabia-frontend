@@ -1,15 +1,8 @@
-
 import { useState, useEffect } from "react";
 
-// Mock user data - in a real app this would come from authentication service
-const mockUser = {
-  name: "John Doe",
-  email: "john@example.com",
-  id: "user-123"
-};
-
 const useAuth = () => {
-    const [auth, setAuth] = useState({ user: mockUser, token: "mock-token" });
+    const [auth, setAuth] = useState({ user: null, token: null });
+    console.log("🚀 ~ useAuth ~ auth:", auth)
 
     useEffect(() => {
         const storedAuth = localStorage.getItem("useer");
@@ -19,8 +12,7 @@ const useAuth = () => {
                 setAuth(parsedAuth);
             } catch (error) {
                 console.error("Error parsing auth data from localStorage:", error);
-                // Fallback to the mock user if there's an error
-                setAuth({ user: mockUser, token: "mock-token" });
+                setAuth({ user: null, token: null });
             }
         }
     }, []);
