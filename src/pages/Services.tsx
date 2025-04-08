@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 import useAuth from "@/hooks/useAuth";
@@ -17,8 +17,11 @@ import uploadToCloudinary from "@/lib/upload";
 
 const Services = () => {
   const { user } = useAuth();
-  console.log("🚀 ~ Services ~ user:", user)
+  console.log("🚀 ~ Services ~ user:", user);
   const [services, setServices] = useState([]);
+
+  // State for controlling modal visibility
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const [currentService, setCurrentService] = useState({
     id: 0,
@@ -41,10 +44,9 @@ const Services = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [serviceToDelete, setServiceToDelete] = useState(null);
 
-  // Fetch services on mount
+  // Fetch services on mount if user is available
   useEffect(() => {
-    console.log(user)
-    if(user?.id){
+    if (user?.id) {
       fetchServices();
     }
   }, [user]);
@@ -53,7 +55,7 @@ const Services = () => {
     setLoadingServices(true);
     try {
       const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/service/${user.id}`);
-    console.log(response.data)
+      console.log(response.data);
       if (response.data.service) {
         setServices(response.data.service);
       } else {
@@ -118,6 +120,9 @@ const Services = () => {
       }
       setCreating(false);
     }
+
+    // Close the dialog and reset the form
+    setDialogOpen(false);
     resetForm();
   };
 
@@ -138,13 +143,14 @@ const Services = () => {
     setIsDeleteDialogOpen(false);
   };
 
-  // Populate form for editing a service
+  // Populate form for editing a service and open modal immediately
   const handleEdit = (service) => {
     setCurrentService(service);
     setIsEditing(true);
+    setDialogOpen(true);
   };
 
-  // Reset the form to its default values
+  // Reset the form to default values
   const resetForm = () => {
     setCurrentService({
       id: 0,
@@ -187,136 +193,147 @@ const Services = () => {
               <h1 className="text-3xl font-bold">Your Services</h1>
               <p className="text-muted-foreground">Manage your service listings</p>
             </div>
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button className="flex items-center gap-2">
-                  <PlusCircle size={18} />
-                  {isEditing ? "Edit Service" : "Add New Service"}
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
-                <form onSubmit={handleFormSubmit}>
-                  <DialogHeader>
-                    <DialogTitle>{isEditing ? "Edit Service" : "Add New Service"}</DialogTitle>
-                    <DialogDescription>
-                      {isEditing
-                        ? "Update your service information below"
-                        : "Enter the details for your new service"}
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="grid gap-4 py-4">
+            {/* Instead of using DialogTrigger, use an onClick to open the dialog */}
+            <Button
+              className="flex items-center gap-2"
+              onClick={() => {
+                setIsEditing(false);
+                resetForm();
+                setDialogOpen(true);
+              }}
+            >
+              <PlusCircle size={18} />
+              Add New Service
+            </Button>
+          </div>
+
+          {/* Controlled Dialog for both adding and editing services */}
+          <Dialog open={dialogOpen} onOpenChange={(open) => {
+            setDialogOpen(open);
+            if (!open) resetForm();
+          }}>
+            <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+              <form onSubmit={handleFormSubmit}>
+                <DialogHeader>
+                  <DialogTitle>{isEditing ? "Edit Service" : "Add New Service"}</DialogTitle>
+                  <DialogDescription>
+                    {isEditing
+                      ? "Update your service information below"
+                      : "Enter the details for your new service"}
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="space-y-2">
+                    <label htmlFor="title" className="text-sm font-medium">
+                      Service Title
+                    </label>
+                    <Input
+                      id="title"
+                      value={currentService.title}
+                      onChange={(e) =>
+                        setCurrentService({ ...currentService, title: e.target.value })
+                      }
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label htmlFor="category" className="text-sm font-medium">
+                      Category
+                    </label>
+                    <Input
+                      id="category"
+                      value={currentService.category}
+                      onChange={(e) =>
+                        setCurrentService({ ...currentService, category: e.target.value })
+                      }
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label htmlFor="location" className="text-sm font-medium">
+                      Location
+                    </label>
+                    <Input
+                      id="location"
+                      value={currentService.location}
+                      onChange={(e) =>
+                        setCurrentService({ ...currentService, location: e.target.value })
+                      }
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label htmlFor="description" className="text-sm font-medium">
+                      Description
+                    </label>
+                    <Textarea
+                      id="description"
+                      value={currentService.description}
+                      onChange={(e) =>
+                        setCurrentService({ ...currentService, description: e.target.value })
+                      }
+                      rows={3}
+                      required
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <label htmlFor="title" className="text-sm font-medium">
-                        Service Title
+                      <label htmlFor="email" className="text-sm font-medium">
+                        Contact Email
                       </label>
                       <Input
-                        id="title"
-                        value={currentService.title}
+                        id="email"
+                        type="email"
+                        value={currentService.contactEmail}
                         onChange={(e) =>
-                          setCurrentService({ ...currentService, title: e.target.value })
+                          setCurrentService({ ...currentService, contactEmail: e.target.value })
                         }
                         required
                       />
                     </div>
                     <div className="space-y-2">
-                      <label htmlFor="category" className="text-sm font-medium">
-                        Category
+                      <label htmlFor="phone" className="text-sm font-medium">
+                        Contact Phone
                       </label>
                       <Input
-                        id="category"
-                        value={currentService.category}
+                        id="phone"
+                        value={currentService.contactPhone}
                         onChange={(e) =>
-                          setCurrentService({ ...currentService, category: e.target.value })
+                          setCurrentService({ ...currentService, contactPhone: e.target.value })
                         }
-                        required
                       />
-                    </div>
-                    <div className="space-y-2">
-                      <label htmlFor="location" className="text-sm font-medium">
-                        Location
-                      </label>
-                      <Input
-                        id="location"
-                        value={currentService.location}
-                        onChange={(e) =>
-                          setCurrentService({ ...currentService, location: e.target.value })
-                        }
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label htmlFor="description" className="text-sm font-medium">
-                        Description
-                      </label>
-                      <Textarea
-                        id="description"
-                        value={currentService.description}
-                        onChange={(e) =>
-                          setCurrentService({ ...currentService, description: e.target.value })
-                        }
-                        rows={3}
-                        required
-                      />
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <label htmlFor="email" className="text-sm font-medium">
-                          Contact Email
-                        </label>
-                        <Input
-                          id="email"
-                          type="email"
-                          value={currentService.contactEmail}
-                          onChange={(e) =>
-                            setCurrentService({ ...currentService, contactEmail: e.target.value })
-                          }
-                          required
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <label htmlFor="phone" className="text-sm font-medium">
-                          Contact Phone
-                        </label>
-                        <Input
-                          id="phone"
-                          value={currentService.contactPhone}
-                          onChange={(e) =>
-                            setCurrentService({ ...currentService, contactPhone: e.target.value })
-                          }
-                        />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <label htmlFor="image" className="text-sm font-medium">
-                        Image
-                      </label>
-                      <Input
-                        id="image"
-                        type="file"
-                        onChange={handleFileChange}
-                      />
-                      {imageUploading && <p>Uploading image...</p>}
-                      {currentService.image && !imageUploading && (
-                        <img src={currentService.image} alt="Service" className="mt-2 h-40 object-cover" />
-                      )}
                     </div>
                   </div>
-                  <DialogFooter>
-                    <Button
-                      type="submit"
-                      disabled={creating || updating || imageUploading}
-                    >
-                      {(creating || updating)
-                        ? "Saving..."
-                        : isEditing
-                          ? "Save Changes"
-                          : "Add Service"}
-                    </Button>
-                  </DialogFooter>
-                </form>
-              </DialogContent>
-            </Dialog>
-          </div>
+                  <div className="space-y-2">
+                    <label htmlFor="image" className="text-sm font-medium">
+                      Image
+                    </label>
+                    <Input
+                      id="image"
+                      type="file"
+                      onChange={handleFileChange}
+                    />
+                    {imageUploading && <p>Uploading image...</p>}
+                    {currentService.image && !imageUploading && (
+                      <img src={currentService.image} alt="Service" className="mt-2 h-40 object-cover" />
+                    )}
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button
+                    type="submit"
+                    disabled={creating || updating || imageUploading}
+                  >
+                    {(creating || updating)
+                      ? "Saving..."
+                      : isEditing
+                        ? "Save Changes"
+                        : "Add Service"}
+                  </Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
 
           {loadingServices ? (
             <p>Loading services...</p>
@@ -377,11 +394,13 @@ const Services = () => {
               ) : (
                 <div className="col-span-3 text-center py-10 border rounded-lg">
                   <p className="text-muted-foreground mb-4">You haven't added any services yet.</p>
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button>Add Your First Service</Button>
-                    </DialogTrigger>
-                  </Dialog>
+                  <Button onClick={() => {
+                    setIsEditing(false);
+                    resetForm();
+                    setDialogOpen(true);
+                  }}>
+                    Add Your First Service
+                  </Button>
                 </div>
               )}
             </div>
