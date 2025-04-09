@@ -1,8 +1,8 @@
+
 import { useState, useEffect } from "react";
 
 const useAuth = () => {
     const [auth, setAuth] = useState({ user: null, token: null });
-    console.log("🚀 ~ useAuth ~ auth:", auth)
 
     useEffect(() => {
         const storedAuth = localStorage.getItem("useer");
@@ -17,7 +17,12 @@ const useAuth = () => {
         }
     }, []);
 
-    return auth;
+    const logout = () => {
+        localStorage.removeItem("useer");
+        setAuth({ user: null, token: null });
+    };
+
+    return { ...auth, logout };
 };
 
 export default useAuth;

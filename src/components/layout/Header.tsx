@@ -17,9 +17,10 @@ interface NavItemProps {
   to: string;
   children: React.ReactNode;
   className?: string;
+  onClick?: () => void;
 }
 
-const NavItem = ({ to, children, className = "" }: NavItemProps) => {
+const NavItem = ({ to, children, className = "", onClick }: NavItemProps) => {
   const location = useLocation();
   const isActive = location.pathname === to;
 
@@ -31,6 +32,7 @@ const NavItem = ({ to, children, className = "" }: NavItemProps) => {
           ? "text-foreground"
           : "text-muted-foreground hover:text-foreground"
       } ${className}`}
+      onClick={onClick}
     >
       {children}
     </Link>
