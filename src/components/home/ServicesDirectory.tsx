@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import { MapPin, Star, Phone, Clock, Filter, Search, Mail } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -5,11 +6,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { toast } from "sonner";
+import { Link } from "react-router-dom";
 
 
 
 
-const ServiceCard = ({ service }: { service: any}) => (
+const ServiceCard = ({ service }: { service: any }) => (
   <Card className="overflow-hidden">
     <div className="relative h-48 overflow-hidden">
       <img
@@ -25,7 +27,7 @@ const ServiceCard = ({ service }: { service: any}) => (
     </div>
     <CardHeader>
       <CardTitle>{service.title}</CardTitle>
-     
+
     </CardHeader>
     <CardContent>
       <CardDescription className="mb-4">{service.description}</CardDescription>
@@ -53,7 +55,6 @@ const ServiceCard = ({ service }: { service: any}) => (
 );
 
 const ServicesDirectory = () => {
-  const [activeCategory, setActiveCategory] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
   const [loadingServices, setLoadingServices] = useState(false);
   const [services, setServices] = useState([]);
@@ -63,11 +64,11 @@ const ServicesDirectory = () => {
     (service) =>
       service.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
- const fetchServices = async () => {
+  const fetchServices = async () => {
     setLoadingServices(true);
     try {
       const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/service/`);
-    console.log(response.data)
+      console.log(response.data)
       if (response.data.services) {
         setServices(response.data.services);
       } else {
@@ -80,9 +81,9 @@ const ServicesDirectory = () => {
     setLoadingServices(false);
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchServices()
-  },[])
+  }, [])
   return (
     <section className="section-container bg-secondary/50" id="services">
       <div className="mb-12 text-center">
@@ -93,7 +94,7 @@ const ServicesDirectory = () => {
       </div>
 
       <div className="flex flex-col md:flex-row justify-between mb-8 space-y-4 md:space-y-0">
-       
+
 
         <div className="relative w-full md:w-64">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -111,8 +112,8 @@ const ServicesDirectory = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 3xl:grid-cols-4 gap-8">
         {filteredServices.map((service) => (
-          <div 
-            key={service.id} 
+          <div
+            key={service.id}
             className="transform transition-all duration-300 hover:-translate-y-1"
           >
             <ServiceCard service={service} />
@@ -121,12 +122,14 @@ const ServicesDirectory = () => {
       </div>
 
       <div className="mt-12 text-center">
-        <Button 
+        <Link to={"/local-services"}>
+        <Button
           variant="outline"
-          size="lg" 
-        >
+          size="lg"
+          >
           Browse All Services <Filter className="h-4 w-4" />
         </Button>
+          </Link>
       </div>
     </section>
   );
