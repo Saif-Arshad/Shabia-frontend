@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { News } from "@/types/news";
 
 interface NewsCardProps {
-  news: News;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  news: any;
   onViewDetails?: (news: News) => void;
   isAdmin?: boolean;
   onEdit?: (news: News) => void;
@@ -31,23 +32,31 @@ const NewsCard = ({ news, onViewDetails, isAdmin = false, onEdit, onDelete }: Ne
       </div>
       <CardHeader className="pt-5">
         <div className="flex items-center text-sm text-gray-500 mb-2">
-          {news.author && (
+          {news.user && (
             <>
-              <User className="mr-1 h-3 w-3" />
-              <span className="mr-3">{news.author}</span>
+              <User className="mr-1 h-3.5 w-3.5" />
+              <span className="mr-3">{news.user.name}</span>
             </>
           )}
-          {news.date && (
+          {news.createdAt && (
             <>
               <Clock className="mr-1 h-3 w-3" />
-              <span>{news.date}</span>
+              <span>{new Date(news.createdAt).toLocaleDateString('en-US', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
+              })}</span>
             </>
           )}
         </div>
         <CardTitle>{news.title}</CardTitle>
       </CardHeader>
       <CardContent>
-        <CardDescription>{news.description}</CardDescription>
+        <CardDescription>
+          {news.description.length > 100 
+            ? `${news.description.slice(0, 100)}...` 
+            : news.description}
+        </CardDescription>
       </CardContent>
       <CardFooter className={isAdmin ? "flex justify-between" : ""}>
         <Button 

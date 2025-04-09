@@ -9,55 +9,44 @@ import NewsCard from "@/components/news/NewsCard";
 import { News } from "@/types/news";
 import NewsDetailDialog from "@/components/news/NewsDetailDialog";
 import { Search, Tag } from "lucide-react";
+import axios from "axios";
+import { toast } from "sonner";
 
-// Mock news data
-const mockNews: News[] = [
-  {
-    id: 1,
-    title: "New Community Park Opening Next Month",
-    description: "The long-awaited Al Reem Park will open its doors to the public next month. The park will feature walking trails, children's play areas, and sports facilities.",
-    image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81",
-    category: "Community",
-    author: "Sarah Ahmed",
-    date: "April 5, 2025",
-  },
-  {
-    id: 2,
-    title: "Local Business Spotlight: Cafe Harmony",
-    description: "Cafe Harmony, a new coffee shop on Al Reem Island, is quickly becoming a favorite spot for locals. Their organic coffee beans and homemade pastries are drawing crowds.",
-    image: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb",
-    category: "Business",
-    author: "Mohammed Ali",
-    date: "April 4, 2025",
-  },
-  {
-    id: 3,
-    title: "New School Opening in September",
-    description: "A new international school will be opening its doors this September, offering education from kindergarten to high school with a focus on STEAM subjects.",
-    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b",
-    category: "Education",
-    author: "Fatima Hassan",
-    date: "April 2, 2025",
-  },
-];
-
-const categories = ["All", "Community", "Business", "Education"];
 
 const NewsList = () => {
-  const [news, setNews] = useState<News[]>(mockNews);
-  const [filteredNews, setFilteredNews] = useState<News[]>(mockNews);
+  const [filteredNews, setFilteredNews] = useState<News[]>([]);
+  console.log("🚀 ~ NewsList ~ filteredNews:", filteredNews)
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedNews, setSelectedNews] = useState<News | null>(null);
   const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
-  
+  const [loading, setLoading] = useState(false);
+    const [news, setNews] = useState([]);
   useEffect(() => {
     window.scrollTo(0, 0);
-    // fetchNews();
   }, []);
   
+
+  const fetchNews = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/news/`);
+      console.log(response.data)
+      if (response.data.news) {
+        setNews(response.data.news);
+      } else {
+        setNews([]);
+      }
+    } catch (err) {
+      toast.error("Error fetching services");
+      console.error(err);
+    }
+    setLoading(false);
+  };
   useEffect(() => {
-    // Filter news by search term and category
+    fetchNews()
+  }, [])
+  useEffect(() => {
     let result = news;
     
     if (searchTerm) {
@@ -65,10 +54,6 @@ const NewsList = () => {
         item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.description.toLowerCase().includes(searchTerm.toLowerCase())
       );
-    }
-    
-    if (selectedCategory !== "All") {
-      result = result.filter(item => item.category === selectedCategory);
     }
     
     setFilteredNews(result);
@@ -112,18 +97,7 @@ const NewsList = () => {
         
         <section className="py-12 bg-slate-50 dark:bg-slate-900/50">
           <div className="container mx-auto px-4">
-            <div className="mb-8 flex flex-wrap gap-2 justify-center">
-              {categories.map((category) => (
-                <Button
-                  key={category}
-                  variant={selectedCategory === category ? "default" : "outline"}
-                  onClick={() => setSelectedCategory(category)}
-                  className="mb-2"
-                >
-                  {category}
-                </Button>
-              ))}
-            </div>
+
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredNews.length === 0 ? (

@@ -70,7 +70,7 @@ const ServicesDirectory = () => {
       const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/service/`);
       console.log(response.data)
       if (response.data.services) {
-        setServices(response.data.services);
+        setServices(response.data.services.slice(0,3));
       } else {
         setServices([]);
       }
