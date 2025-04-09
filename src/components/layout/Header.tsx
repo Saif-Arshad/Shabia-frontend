@@ -1,224 +1,179 @@
 
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { cn } from "@/lib/utils";
-import { MenuIcon, X, Search, MapPin, Bell, Calendar, BriefcaseIcon, User, LogOut, Settings, PlusCircle } from "lucide-react";
+import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { X, Menu, ChevronDown, User, LogOut } from "lucide-react";
 import useAuth from "@/hooks/useAuth";
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuSeparator, 
-  DropdownMenuTrigger
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 
 interface NavItemProps {
-  href: string;
+  to: string;
   children: React.ReactNode;
-  icon?: React.ReactNode;
+  className?: string;
 }
 
-const NavItem = ({ href, children, icon }: NavItemProps) => {
+const NavItem = ({ to, children, className = "" }: NavItemProps) => {
+  const location = useLocation();
+  const isActive = location.pathname === to;
+
   return (
     <Link
-      to={href}
-      className="flex items-center px-3 py-2 text-sm font-medium rounded-md transition-all duration-200
-                hover:bg-accent hover:text-accent-foreground group"
+      to={to}
+      className={`text-sm font-medium transition-colors ${
+        isActive
+          ? "text-foreground"
+          : "text-muted-foreground hover:text-foreground"
+      } ${className}`}
     >
-      {icon && <span className="mr-2">{icon}</span>}
-      <span className="relative overflow-hidden">
-        <span className="block transition-transform duration-300 transform group-hover:-translate-y-full">
-          {children}
-        </span>
-        <span className="absolute top-0 left-0 block transition-transform duration-300 transform translate-y-full group-hover:translate-y-0">
-          {children}
-        </span>
-      </span>
+      {children}
     </Link>
   );
 };
 
 const Header = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { user } = useAuth();
-  
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY;
-      setIsScrolled(scrollPosition > 10);
-    };
+  const { user, logout } = useAuth();
+  const [isOpen, setIsOpen] = useState(false);
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-  
-  const getInitials = (name) => {
-    if (!name) return "";
-    const nameParts = name.split(" ");
-    if (nameParts.length === 1) return nameParts[0].charAt(0).toUpperCase();
-    return (
-      nameParts[0].charAt(0).toUpperCase() +
-      nameParts[1].charAt(0).toUpperCase()
-    );
-  };
-  
   return (
-    <header
-      className={cn(
-        "fixed top-0 left-0 right-0 z-30 transition-all duration-300 ease-in-out py-3",
-        isScrolled
-          ? "bg-white/80 backdrop-blur-lg shadow-sm dark:bg-slate-900/80"
-          : "bg-transparent"
-      )}
-    >
-      <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
-          {/* Logo */}
-          <Link
-            to="/"
-            className="flex items-center transition-transform duration-300 hover:scale-105"
-          >
-            <span className="text-xl font-bold tracking-tight text-primary">
-              Shabia<span className="text-accent"></span>
-            </span>
-          </Link>
+    <header className="fixed top-0 left-0 right-0 z-40 bg-background border-b border-border backdrop-blur-md bg-opacity-80">
+      <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+        {/* Logo */}
+        <Link to="/" className="flex items-center">
+          <span className="text-xl font-bold">CommHub</span>
+        </Link>
 
-          <nav className="hidden md:flex items-center space-x-1">
-            <NavItem href="/local-services" icon={<MapPin className="w-4 h-4" />}>
-              Local Services
-            </NavItem>
-            <NavItem href="/" icon={<Bell className="w-4 h-4" />}>
-              News
-            </NavItem>
-            <NavItem href="/" icon={<Calendar className="w-4 h-4" />}>
-              Events
-            </NavItem>
-            <NavItem href="/" icon={<BriefcaseIcon className="w-4 h-4" />}>
-              Jobs
-            </NavItem>
-          </nav>
-            
-          <div className="flex items-center">
-            {user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger className="flex items-center space-x-2 focus:outline-none">
-                  <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
-                    {getInitials(user.name)}
-                  </div>
-                  <span className="capitalize hidden sm:inline-block">{user.name}</span>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuItem className="cursor-pointer" asChild>
-                    <Link to="/dashboard">
-                      <User className="mr-2 h-4 w-4" /> Dashboard
-                    </Link>
-                  </DropdownMenuItem>
-                 
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem className="cursor-pointer">
-                    <LogOut className="mr-2 h-4 w-4" /> Logout
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              <>
-                <NavItem href="/register" icon={<User className="w-4 h-4" />}>
-                  Register
-                </NavItem>
-                <NavItem href="/login" icon={<User className="w-4 h-4" />}>
-                  Login
-                </NavItem>
-              </>
-            )}
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center space-x-8">
+          <NavItem to="/">Home</NavItem>
+          <NavItem to="/local-services">Services</NavItem>
+          <NavItem to="/news">News</NavItem>
+          <NavItem to="/events">Events</NavItem>
+          <NavItem to="/jobs">Jobs</NavItem>
+        </nav>
 
-            {/* Mobile menu button */}
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 ml-3 text-gray-500 rounded-full transition duration-200 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary md:hidden"
-              aria-expanded={isMobileMenuOpen}
-              aria-label="Toggle menu"
-            >
-              {isMobileMenuOpen ? (
-                <X className="w-5 h-5" />
-              ) : (
-                <MenuIcon className="w-5 h-5" />
-              )}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile menu */}
-      <div
-        className={cn(
-          "fixed inset-x-0 top-[61px] z-20 bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg transition-[max-height] duration-300 ease-in-out overflow-hidden md:hidden",
-          isMobileMenuOpen ? "max-h-screen" : "max-h-0"
-        )}
-      >
-        <div className="px-2 pt-2 pb-3 space-y-1">
-          <Link
-            to="/local-services"
-            className="flex items-center px-3 py-3 text-base font-medium rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150"
-          >
-            <MapPin className="w-5 h-5 mr-3 text-accent" />
-            Local Services
-          </Link>
-          <Link
-            to="/"
-            className="flex items-center px-3 py-3 text-base font-medium rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150"
-          >
-            <Bell className="w-5 h-5 mr-3 text-accent" />
-            News
-          </Link>
-          <Link
-            to="/"
-            className="flex items-center px-3 py-3 text-base font-medium rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150"
-          >
-            <Calendar className="w-5 h-5 mr-3 text-accent" />
-            Events
-          </Link>
-          <Link
-            to="/"
-            className="flex items-center px-3 py-3 text-base font-medium rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150"
-          >
-            <BriefcaseIcon className="w-5 h-5 mr-3 text-accent" />
-            Jobs
-          </Link>
-          
+        {/* Auth Buttons or User Dropdown */}
+        <div className="hidden md:flex items-center space-x-4">
           {user ? (
-            <>
-              <Link
-                to="/dashboard"
-                className="flex items-center px-3 py-3 text-base font-medium rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150"
-              >
-                <User className="w-5 h-5 mr-3 text-accent" />
-                Dashboard
-              </Link>
-              <Link
-                to="/dashboard/services/new"
-                className="flex items-center px-3 py-3 text-base font-medium rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150"
-              >
-                <PlusCircle className="w-5 h-5 mr-3 text-accent" />
-                Add Service
-              </Link>
-              <div
-                className="flex items-center px-3 py-3 text-base font-medium rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150"
-              >
-                <LogOut className="w-5 h-5 mr-3 text-accent" />
-                Logout
-              </div>
-            </>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="flex items-center space-x-2"
+                  role="button"
+                  aria-expanded="false"
+                >
+                  <span>{user.name}</span>
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <Link to="/dashboard">
+                  <DropdownMenuItem className="cursor-pointer">
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Dashboard</span>
+                  </DropdownMenuItem>
+                </Link>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className="cursor-pointer text-destructive focus:text-destructive"
+                  onClick={logout}
+                >
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Log out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           ) : (
-            <Link
-              to="/login"
-              className="flex items-center px-3 py-3 text-base font-medium rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150"
-            >
-              <User className="w-5 h-5 mr-3 text-accent" />
-              Login
-            </Link>
+            <>
+              <Link to="/login">
+                <Button variant="ghost">Log In</Button>
+              </Link>
+              <Link to="/register">
+                <Button>Sign Up</Button>
+              </Link>
+            </>
           )}
         </div>
+
+        {/* Mobile Menu Button */}
+        <Sheet open={isOpen} onOpenChange={setIsOpen}>
+          <SheetTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden"
+              aria-label="Toggle Menu"
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="right" className="w-[300px]">
+            <div className="flex flex-col h-full">
+              <div className="space-y-6 flex-1">
+                <h2 className="text-2xl font-bold tracking-tight">Menu</h2>
+                <nav className="flex flex-col space-y-4">
+                  <NavItem to="/" className="text-base py-2" onClick={() => setIsOpen(false)}>
+                    Home
+                  </NavItem>
+                  <NavItem to="/local-services" className="text-base py-2" onClick={() => setIsOpen(false)}>
+                    Services
+                  </NavItem>
+                  <NavItem to="/news" className="text-base py-2" onClick={() => setIsOpen(false)}>
+                    News
+                  </NavItem>
+                  <NavItem to="/events" className="text-base py-2" onClick={() => setIsOpen(false)}>
+                    Events
+                  </NavItem>
+                  <NavItem to="/jobs" className="text-base py-2" onClick={() => setIsOpen(false)}>
+                    Jobs
+                  </NavItem>
+                </nav>
+              </div>
+
+              <div className="border-t pt-4 pb-2">
+                {user ? (
+                  <div className="space-y-4">
+                    <Link to="/dashboard" onClick={() => setIsOpen(false)}>
+                      <Button variant="secondary" className="w-full justify-start">
+                        <User className="mr-2 h-4 w-4" />
+                        Dashboard
+                      </Button>
+                    </Link>
+                    <Button
+                      variant="destructive"
+                      className="w-full justify-start"
+                      onClick={() => {
+                        logout();
+                        setIsOpen(false);
+                      }}
+                    >
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Log out
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="flex flex-col space-y-3">
+                    <Link to="/login" onClick={() => setIsOpen(false)} className="w-full">
+                      <Button variant="outline" className="w-full">
+                        Log In
+                      </Button>
+                    </Link>
+                    <Link to="/register" onClick={() => setIsOpen(false)} className="w-full">
+                      <Button className="w-full">Sign Up</Button>
+                    </Link>
+                  </div>
+                )}
+              </div>
+            </div>
+          </SheetContent>
+        </Sheet>
       </div>
     </header>
   );

@@ -9,78 +9,19 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
 import { toast } from "sonner";
+import ServiceDetailDialog from "@/components/services/ServiceDetailDialog";
 
-
-const featuredServices = [
-  {
-    id: 1,
-    title: "Professional Plumbing Services",
-    description: "Expert plumbing solutions for residential and commercial properties. 24/7 emergency services available.",
-    location: "Abu Dhabi City",
-    category: "Plumbing",
-    rating: 4.8,
-    reviews: 56,
-    image: "https://images.unsplash.com/photo-1565183928294-7063f23ce0f8?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80"
-  },
-  {
-    id: 2,
-    title: "Reliable Electrical Contractor",
-    description: "Licensed electricians providing installation, repair, and maintenance services for all electrical needs.",
-    location: "Khalifa City",
-    category: "Electrical",
-    rating: 4.6,
-    reviews: 42,
-    image: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80"
-  },
-  {
-    id: 3,
-    title: "Premium Home Cleaning",
-    description: "Top-rated home cleaning services with eco-friendly products and professional staff.",
-    location: "Al Reem Island",
-    category: "Home Cleaning",
-    rating: 4.9,
-    reviews: 78,
-    image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80"
-  },
-  {
-    id: 4,
-    title: "Expert Gardening & Landscaping",
-    description: "Transform your outdoor space with our professional gardening and landscaping services.",
-    location: "Mohamed Bin Zayed City",
-    category: "Gardening",
-    rating: 4.7,
-    reviews: 36,
-    image: "https://images.unsplash.com/photo-1599629954294-8897ae9979be?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80"
-  },
-  {
-    id: 5,
-    title: "Auto Repair Specialists",
-    description: "Complete auto repair services for all makes and models. Certified mechanics and quality parts.",
-    location: "Mussafah",
-    category: "Car Repair",
-    rating: 4.5,
-    reviews: 62,
-    image: "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80"
-  },
-  {
-    id: 6,
-    title: "Academic Excellence Tutoring",
-    description: "Personalized tutoring for students of all ages. Experienced tutors for all subjects.",
-    location: "Al Bateen",
-    category: "Tutoring",
-    rating: 4.8,
-    reviews: 51,
-    image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80"
-  }
-];
 const LocalServices = () => {
   const [loadingServices, setLoadingServices] = useState(false);
   const [services, setServices] = useState([]);
-    const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedService, setSelectedService] = useState(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  
   const fetchServices = async () => {
     setLoadingServices(true);
     try {
@@ -97,10 +38,17 @@ const LocalServices = () => {
     }
     setLoadingServices(false);
   };
+  
   const filteredServices = services.filter(
     (service) =>
       service.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  
+  const handleViewDetails = (service) => {
+    setSelectedService(service);
+    setIsDialogOpen(true);
+  };
+  
   useEffect(() => {
     fetchServices()
   }, [])
@@ -141,7 +89,6 @@ const LocalServices = () => {
           <div className="container mx-auto px-4">
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-2xl font-bold">Featured Service Providers</h2>
-
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredServices.map((service) => (
@@ -163,19 +110,25 @@ const LocalServices = () => {
                   </CardHeader>
                   <CardContent>
                     <CardDescription className="line-clamp-2 mb-4">{service.description}</CardDescription>
-                   
                   </CardContent>
                   <CardFooter>
-                    <Button className="w-full">View Details</Button>
+                    <Button className="w-full" onClick={() => handleViewDetails(service)}>
+                      View Details
+                    </Button>
                   </CardFooter>
                 </Card>
               ))}
             </div>
-
           </div>
         </section>
       </main>
       <Footer />
+      
+      <ServiceDetailDialog 
+        service={selectedService} 
+        isOpen={isDialogOpen} 
+        onClose={() => setIsDialogOpen(false)}
+      />
     </div>
   );
 };

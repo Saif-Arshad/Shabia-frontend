@@ -12,6 +12,9 @@ import LocalServices from "./pages/LocalServices";
 import Dashboard from "./pages/Dashboard";
 import NewService from "./pages/NewService";
 import Services from "./pages/Services";
+import NewsManagement from "./pages/NewsManagement";
+import NewsList from "./pages/NewsList";
+import NewsDetails from "./pages/NewsDetails";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +32,9 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/services" element={<Services />} />
           <Route path="/dashboard/services/new" element={<NewService />} />
+          <Route path="/dashboard/news" element={<NewsManagement />} />
+          <Route path="/news" element={<NewsList />} />
+          <Route path="/news/:id" element={<NewsDetails />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

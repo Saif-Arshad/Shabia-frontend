@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import { Briefcase, Settings, User, MapPin } from "lucide-react";
+import { Briefcase, Settings, User, MapPin, FileText } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
@@ -56,7 +56,23 @@ const Dashboard = () => {
                 </CardContent>
               </Card>
             </Link>
-         
+            
+            <Link to="/dashboard/news" className="block">
+              <Card className="h-full transition-all hover:shadow-md">
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <FileText className="mr-2 h-5 w-5 text-primary" />
+                    Manage News
+                  </CardTitle>
+                  <CardDescription>Create and manage community news</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-500">
+                    Add, edit, delete and publish news articles
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
           </div>
         </div>
       </main>
