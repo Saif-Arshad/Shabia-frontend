@@ -1,0 +1,105 @@
+
+import React from "react";
+import { Calendar, Clock, MapPin, Users } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Event } from "@/types/event";
+import { toast } from "@/hooks/use-toast";
+
+interface EventDetailDialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+  event: Event | null;
+}
+
+const EventDetailDialog = ({ isOpen, onClose, event }: EventDetailDialogProps) => {
+  if (!event) return null;
+
+  const handleRSVP = () => {
+    toast({
+      title: "RSVP Successful!",
+      description: `You have successfully registered for ${event.title}.`,
+    });
+    onClose();
+  };
+
+  const eventDate = new Date(event.date);
+  const formattedDate = eventDate.toLocaleDateString('en-US', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-md md:max-w-xl max-h-[95vh] overflow-y-auto lg:max-w-2xl">
+        <DialogHeader>
+          <DialogTitle className="text-2xl font-bold">{event.title}</DialogTitle>
+          <DialogDescription className="flex items-center gap-2 mt-2">
+            <Badge variant="outline" className="mr-2">
+              {event.category}
+            </Badge>
+          </DialogDescription>
+        </DialogHeader>
+        
+        <div className="space-y-6">
+          <div className="rounded-md overflow-hidden">
+            <img 
+              src={event.image} 
+              alt={event.title}
+              className="w-full h-[300px] object-cover" 
+            />
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Event Details</h3>
+              <div className="space-y-3">
+                <div className="flex items-center">
+                  <Calendar className="h-5 w-5 mr-3 text-primary" />
+                  <span>{formattedDate}</span>
+                </div>
+                <div className="flex items-center">
+                  <Clock className="h-5 w-5 mr-3 text-primary" />
+                  <span>{event.startTime} - {event.endTime}</span>
+                </div>
+                <div className="flex items-center">
+                  <MapPin className="h-5 w-5 mr-3 text-primary" />
+                  <span>{event.location}</span>
+                </div>
+                {event.attendees !== undefined && (
+                  <div className="flex items-center">
+                    <Users className="h-5 w-5 mr-3 text-primary" />
+                    <span>{event.attendees} people attending</span>
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Description</h3>
+              <p className="text-foreground/80">{event.description}</p>
+            </div>
+          </div>
+        </div>
+        
+        <DialogFooter className="mt-6">
+          <Button onClick={handleRSVP} size="lg">
+            RSVP to this Event
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default EventDetailDialog;

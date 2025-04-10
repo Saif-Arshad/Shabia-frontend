@@ -13,6 +13,8 @@ import Dashboard from "./pages/Dashboard";
 import Services from "./pages/Services";
 import NewsManagement from "./pages/NewsManagement";
 import NewsList from "./pages/NewsList";
+import EventsManagement from "./pages/EventsManagement";
+import EventsList from "./pages/EventsList";
 
 const queryClient = new QueryClient();
 
@@ -30,7 +32,9 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/services" element={<Services />} />
           <Route path="/dashboard/news" element={<NewsManagement />} />
+          <Route path="/dashboard/events" element={<EventsManagement />} />
           <Route path="/news" element={<NewsList />} />
+          <Route path="/events" element={<EventsList />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
