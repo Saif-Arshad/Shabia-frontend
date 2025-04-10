@@ -1,5 +1,4 @@
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 import Header from "@/components/layout/Header";
@@ -9,44 +8,35 @@ import useAuth from "@/hooks/useAuth";
 import EventCard from "@/components/events/EventCard";
 import EventFormDialog from "@/components/events/EventFormDialog";
 import EventDetailDialog from "@/components/events/EventDetailDialog";
-import { Event } from "@/types/event";
+import { toast } from "sonner";
 
-const mockEvents: Event[] = [
-  {
-    id: 1,
-    title: "Community Cleanup Drive",
-    description: "Join us for a day of community service to clean up local parks and streets.",
-    date: "2023-08-15",
-    startTime: "09:00 AM",
-    endTime: "12:00 PM",
-    location: "Central Park, Main Entrance",
-    category: "Community",
-    image: "https://images.unsplash.com/photo-1472396961693-142e6e269027",
-    attendees: 45,
-    createdBy: 1
-  },
-  {
-    id: 2,
-    title: "Tech Meetup: AI Innovation",
-    description: "A gathering of tech enthusiasts to discuss the latest in AI technology.",
-    date: "2023-09-22",
-    startTime: "06:30 PM",
-    endTime: "09:00 PM",
-    location: "Innovation Hub, Downtown",
-    category: "Technology",
-    image: "https://images.unsplash.com/photo-1500673922987-e212871fec22",
-    attendees: 120,
-    createdBy: 1
-  }
-];
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const EventsManagement = () => {
   const { user } = useAuth();
-  const [events, setEvents] = useState<Event[]>(mockEvents);
+  const [events, setEvents] = useState([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
-  const [currentEvent, setCurrentEvent] = useState<Event | null>(null);
+  const [currentEvent, setCurrentEvent] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      fetchEvents();
+    }
+  }, [user]);
+
+  const fetchEvents = async () => {
+    try {
+      const res = await fetch(`${BACKEND_URL}/events/my/${user.id}`);
+      if (!res.ok) throw new Error("Failed to fetch events");
+      const data = await res.json();
+      setEvents(data.events);
+    } catch (error) {
+      console.error("Error fetching events:", error);
+      toast.error("Error fetching events");
+    }
+  };
 
   const handleAddEvent = () => {
     setCurrentEvent(null);
@@ -54,47 +44,69 @@ const EventsManagement = () => {
     setIsFormOpen(true);
   };
 
-  const handleEditEvent = (event: Event) => {
+  const handleEditEvent = (event) => {
     setCurrentEvent(event);
     setIsEditing(true);
     setIsFormOpen(true);
   };
 
-  const handleViewEvent = (event: Event) => {
+  const handleViewEvent = (event) => {
     setCurrentEvent(event);
     setIsDetailOpen(true);
   };
 
-  const handleDeleteEvent = (eventId: number) => {
-    setEvents((prevEvents) => prevEvents.filter((event) => event.id !== eventId));
+  const handleDeleteEvent = async (eventId) => {
+    try {
+      const res = await fetch(`${BACKEND_URL}/events/${eventId}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) throw new Error("Failed to delete event");
+      toast.success("Event deleted successfully");
+      setEvents(prev => prev.filter(e => e.id !== eventId));
+    } catch (error) {
+      console.error("Error deleting event:", error);
+      toast.error("Error deleting event");
+    }
   };
 
-  const handleSaveEvent = (eventData: Partial<Event>) => {
-    if (isEditing && currentEvent) {
-      // Update existing event
-      setEvents((prevEvents) =>
-        prevEvents.map((event) =>
-          event.id === currentEvent.id ? { ...event, ...eventData } : event
-        )
-      );
-    } else {
-      // Add new event
-      const newEvent = {
-        id: Math.max(0, ...events.map((e) => e.id)) + 1,
-        title: eventData.title || "",
-        description: eventData.description || "",
-        date: eventData.date || "",
-        startTime: eventData.startTime || "",
-        endTime: eventData.endTime || "",
-        location: eventData.location || "",
-        category: eventData.category || "",
-        image: eventData.image || "",
-        attendees: 0,
-        createdBy: user?.id || 1,
-      };
-      setEvents((prevEvents) => [...prevEvents, newEvent]);
+  const handleSaveEvent = async (eventData) => {
+    try {
+      if (isEditing && currentEvent) {
+        // Update existing event via PUT
+        const res = await fetch(`${BACKEND_URL}/events/${currentEvent.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ...eventData,
+            createdBy: user.id,
+          }),
+        });
+        if (!res.ok) throw new Error("Failed to update event");
+        const updated = await res.json();
+        toast.success("Event updated successfully");
+        setEvents(prev =>
+          prev.map(e => (e.id === currentEvent.id ? updated.event : e))
+        );
+      } else {
+        // Create new event via POST
+        const res = await fetch(`${BACKEND_URL}/events`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ...eventData,
+            createdBy: user.id,
+          }),
+        });
+        if (!res.ok) throw new Error("Failed to create event");
+        const newEv = await res.json();
+        toast.success("Event created successfully");
+        setEvents(prev => [...prev, newEv.event]);
+      }
+      setIsFormOpen(false);
+    } catch (error) {
+      console.error("Error saving event:", error);
+      toast.error("Error saving event");
     }
-    setIsFormOpen(false);
   };
 
   if (!user) {
@@ -143,7 +155,6 @@ const EventsManagement = () => {
           ))}
         </div>
 
-        {/* Event Form Dialog */}
         <EventFormDialog
           isOpen={isFormOpen}
           onClose={() => setIsFormOpen(false)}
@@ -152,7 +163,6 @@ const EventsManagement = () => {
           isEditing={isEditing}
         />
 
-        {/* Event Detail Dialog */}
         <EventDetailDialog
           isOpen={isDetailOpen}
           onClose={() => setIsDetailOpen(false)}

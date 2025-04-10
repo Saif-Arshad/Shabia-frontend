@@ -17,7 +17,6 @@ interface EventCardProps {
 const EventCard = ({ event, onEdit, onDelete, onView, isManagement = false }: EventCardProps) => {
   return (
     <Card className="group overflow-hidden relative h-full flex flex-col">
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
       <div className="relative h-48">
         <img
           src={event.image}
@@ -50,7 +49,7 @@ const EventCard = ({ event, onEdit, onDelete, onView, isManagement = false }: Ev
         <CardDescription className="text-sm text-foreground/70">
           <div className="flex items-center">
             <Calendar className="h-4 w-4 mr-1 text-primary" />
-            <span>{new Date(event.date).toLocaleDateString('en-US', {
+            <span>{new Date(event.eventDate).toLocaleDateString('en-US', {
               weekday: 'short',
               day: 'numeric',
               month: 'short',
@@ -70,21 +69,21 @@ const EventCard = ({ event, onEdit, onDelete, onView, isManagement = false }: Ev
             <MapPin className="h-4 w-4 mr-2 text-primary" />
             <span className="line-clamp-1">{event.location}</span>
           </div>
-          {event.attendees !== undefined && (
+          {event.participants !== undefined && (
             <div className="flex items-center">
               <Users className="h-4 w-4 mr-2 text-primary" />
-              <span>{event.attendees} attending</span>
+              <span>{event.participants.length} attending</span>
             </div>
           )}
         </div>
       </CardContent>
       <CardFooter>
         {!isManagement && (
-          <Button 
-            className="w-full" 
+          <Button
+            className="w-full"
             onClick={onView}
           >
-            RSVP Now
+            View Detail
           </Button>
         )}
       </CardFooter>

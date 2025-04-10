@@ -1,7 +1,6 @@
-
 import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
-import { Calendar as CalendarIcon, Clock, X } from "lucide-react";
+import { Calendar as CalendarIcon, Clock } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -34,6 +33,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { toast } from "@/hooks/use-toast";
+import uploadToCloudinary from "@/lib/upload";
 
 const eventFormSchema = z.object({
   title: z.string().min(1, { message: "Event title is required" }),
@@ -69,31 +69,37 @@ const categories = [
   "Other"
 ];
 
-const EventFormDialog = ({ isOpen, onClose, onSave, event, isEditing }: EventFormDialogProps) => {
+const EventFormDialog = ({
+  isOpen,
+  onClose,
+  onSave,
+  event,
+  isEditing,
+}: EventFormDialogProps) => {
   const [imagePreview, setImagePreview] = useState<string>("");
+  const [imageUploading, setImageUploading] = useState<boolean>(false);
 
-  // Set up the form with default values
   const form = useForm<EventFormValues>({
     resolver: zodResolver(eventFormSchema),
     defaultValues: {
       title: "",
       description: "",
       date: new Date(),
-      startTime: "18:00",
-      endTime: "20:00",
+      startTime: "",
+      endTime: "",
       location: "",
       category: "Community",
-      image: "https://images.unsplash.com/photo-1472396961693-142e6e269027",
+      image: "",
     },
   });
 
-  // Update form values when editing an existing event
+  // Update form values when editing an existing event or on dialog open
   useEffect(() => {
     if (isEditing && event) {
       form.reset({
         title: event.title,
         description: event.description,
-        date: new Date(event.date),
+        date: new Date(event.eventDate),
         startTime: event.startTime,
         endTime: event.endTime,
         location: event.location,
@@ -106,36 +112,60 @@ const EventFormDialog = ({ isOpen, onClose, onSave, event, isEditing }: EventFor
         title: "",
         description: "",
         date: new Date(),
-        startTime: "18:00",
-        endTime: "20:00",
+        startTime: "",
+        endTime: "",
         location: "",
         category: "Community",
-        image: "https://images.unsplash.com/photo-1472396961693-142e6e269027",
+        image: "",
       });
-      setImagePreview("https://images.unsplash.com/photo-1472396961693-142e6e269027");
     }
   }, [isEditing, event, form, isOpen]);
 
   const onSubmit = (data: EventFormValues) => {
     const eventData = {
       ...data,
+      // Format the date to a YYYY-MM-DD string
       date: format(data.date, "yyyy-MM-dd"),
     };
-    
+
     onSave(eventData);
-    
+
     toast({
       title: isEditing ? "Event updated" : "Event created",
-      description: isEditing 
-        ? "Your event has been successfully updated." 
+      description: isEditing
+        ? "Your event has been successfully updated."
         : "Your event has been successfully created.",
     });
   };
 
+  // Update image URL if the user manually types/pastes a URL
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const url = e.target.value;
     form.setValue("image", url);
     setImagePreview(url);
+  };
+
+  // Handle file upload to Cloudinary and update the form
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImageUploading(true);
+      const {URL,error} = await uploadToCloudinary(file);
+      if (URL) {
+        form.setValue("image", URL);
+        setImagePreview(URL);
+        toast({
+          title: "Image Uploaded",
+          description: "Image uploaded successfully",
+        });
+      } else {
+        toast({
+          title: "Upload Failed",
+          description: "Failed to upload image",
+        });
+      }
+      setImageUploading(false);
+    }
   };
 
   return (
@@ -144,12 +174,12 @@ const EventFormDialog = ({ isOpen, onClose, onSave, event, isEditing }: EventFor
         <DialogHeader>
           <DialogTitle>{isEditing ? "Edit Event" : "Create New Event"}</DialogTitle>
           <DialogDescription>
-            {isEditing 
-              ? "Update your event details below" 
+            {isEditing
+              ? "Update your event details below"
               : "Fill in the details to create a new community event"}
           </DialogDescription>
         </DialogHeader>
-        
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -167,7 +197,7 @@ const EventFormDialog = ({ isOpen, onClose, onSave, event, isEditing }: EventFor
                     </FormItem>
                   )}
                 />
-                
+
                 <FormField
                   control={form.control}
                   name="category"
@@ -190,7 +220,7 @@ const EventFormDialog = ({ isOpen, onClose, onSave, event, isEditing }: EventFor
                     </FormItem>
                   )}
                 />
-                
+
                 <FormField
                   control={form.control}
                   name="date"
@@ -207,11 +237,7 @@ const EventFormDialog = ({ isOpen, onClose, onSave, event, isEditing }: EventFor
                                 !field.value && "text-muted-foreground"
                               )}
                             >
-                              {field.value ? (
-                                format(field.value, "PPP")
-                              ) : (
-                                <span>Pick a date</span>
-                              )}
+                              {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
                               <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                             </Button>
                           </FormControl>
@@ -230,7 +256,7 @@ const EventFormDialog = ({ isOpen, onClose, onSave, event, isEditing }: EventFor
                     </FormItem>
                   )}
                 />
-                
+
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
@@ -248,7 +274,7 @@ const EventFormDialog = ({ isOpen, onClose, onSave, event, isEditing }: EventFor
                       </FormItem>
                     )}
                   />
-                  
+
                   <FormField
                     control={form.control}
                     name="endTime"
@@ -266,7 +292,7 @@ const EventFormDialog = ({ isOpen, onClose, onSave, event, isEditing }: EventFor
                     )}
                   />
                 </div>
-                
+
                 <FormField
                   control={form.control}
                   name="location"
@@ -281,7 +307,7 @@ const EventFormDialog = ({ isOpen, onClose, onSave, event, isEditing }: EventFor
                   )}
                 />
               </div>
-              
+
               <div className="space-y-6 md:col-span-1">
                 <FormField
                   control={form.control}
@@ -290,17 +316,27 @@ const EventFormDialog = ({ isOpen, onClose, onSave, event, isEditing }: EventFor
                     <FormItem>
                       <FormLabel>Event Image URL</FormLabel>
                       <FormControl>
-                        <Input 
-                          placeholder="Enter image URL" 
-                          {...field} 
-                          onChange={handleImageChange} 
+                        <Input
+                          placeholder="Enter image URL"
+                          {...field}
+                          onChange={handleImageChange}
                         />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                
+
+                <FormItem>
+                  <FormLabel>Or Upload Image</FormLabel>
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileUpload}
+                  />
+                  {imageUploading && <p className="text-sm text-muted-foreground">Uploading image...</p>}
+                </FormItem>
+
                 <div className="border rounded-md p-1">
                   <div className="aspect-video w-full rounded overflow-hidden bg-gray-100 dark:bg-gray-800">
                     {imagePreview ? (
@@ -317,7 +353,7 @@ const EventFormDialog = ({ isOpen, onClose, onSave, event, isEditing }: EventFor
                     )}
                   </div>
                 </div>
-                
+
                 <FormField
                   control={form.control}
                   name="description"
@@ -325,10 +361,10 @@ const EventFormDialog = ({ isOpen, onClose, onSave, event, isEditing }: EventFor
                     <FormItem>
                       <FormLabel>Description</FormLabel>
                       <FormControl>
-                        <Textarea 
-                          placeholder="Describe your event" 
-                          className="min-h-[150px] resize-none" 
-                          {...field} 
+                        <Textarea
+                          placeholder="Describe your event"
+                          className="min-h-[150px] resize-none"
+                          {...field}
                         />
                       </FormControl>
                       <FormMessage />
@@ -337,12 +373,12 @@ const EventFormDialog = ({ isOpen, onClose, onSave, event, isEditing }: EventFor
                 />
               </div>
             </div>
-            
+
             <DialogFooter className="mt-6">
               <Button type="button" variant="outline" onClick={onClose}>
                 Cancel
               </Button>
-              <Button type="submit">
+              <Button type="submit" disabled={imageUploading}>
                 {isEditing ? "Update Event" : "Create Event"}
               </Button>
             </DialogFooter>

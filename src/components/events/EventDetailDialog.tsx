@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Calendar, Clock, MapPin, Users } from "lucide-react";
 import {
   Dialog,
@@ -13,6 +13,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Event } from "@/types/event";
 import { toast } from "@/hooks/use-toast";
+import axios from "axios";
+import useAuth from "@/hooks/useAuth";
 
 interface EventDetailDialogProps {
   isOpen: boolean;
@@ -21,17 +23,43 @@ interface EventDetailDialogProps {
 }
 
 const EventDetailDialog = ({ isOpen, onClose, event }: EventDetailDialogProps) => {
+  const { user } = useAuth()
+  const [loading, setLoading] = useState(false)
   if (!event) return null;
+  const handleRSVP = async () => {
+    if (!user) {
+      toast({
+        title: "Login Firts",
+        description: `Please Login first to join ${event.title}.`,
+      });
+      return
+    }
+    setLoading(true)
+    try {
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/events/join`, {
+        eventId: event.id,
+        userId: user.id
+      })
+      toast({
+        title: "RSVP Successful!",
+        description: `You have successfully registered for ${event.title}.`,
+      });
+      onClose();
 
-  const handleRSVP = () => {
-    toast({
-      title: "RSVP Successful!",
-      description: `You have successfully registered for ${event.title}.`,
-    });
-    onClose();
+    } catch (error) {
+      console.log("🚀 ~ handleRSVP ~ error:", error)
+      toast({
+        title: "Errpr!",
+        description: error.response.data.message,
+      });
+
+    } finally {
+      setLoading(false)
+
+    }
   };
 
-  const eventDate = new Date(event.date);
+  const eventDate = new Date(event.eventDate);
   const formattedDate = eventDate.toLocaleDateString('en-US', {
     weekday: 'long',
     day: 'numeric',
@@ -50,16 +78,16 @@ const EventDetailDialog = ({ isOpen, onClose, event }: EventDetailDialogProps) =
             </Badge>
           </DialogDescription>
         </DialogHeader>
-        
+
         <div className="space-y-6">
           <div className="rounded-md overflow-hidden">
-            <img 
-              src={event.image} 
+            <img
+              src={event.image}
               alt={event.title}
-              className="w-full h-[300px] object-cover" 
+              className="w-full h-[300px] object-cover"
             />
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <h3 className="text-lg font-semibold mb-2">Event Details</h3>
@@ -76,25 +104,28 @@ const EventDetailDialog = ({ isOpen, onClose, event }: EventDetailDialogProps) =
                   <MapPin className="h-5 w-5 mr-3 text-primary" />
                   <span>{event.location}</span>
                 </div>
-                {event.attendees !== undefined && (
+                {event.participants !== undefined && (
                   <div className="flex items-center">
                     <Users className="h-5 w-5 mr-3 text-primary" />
-                    <span>{event.attendees} people attending</span>
+                    <span>{event.participants.length} people attending</span>
                   </div>
                 )}
               </div>
             </div>
-            
+
             <div>
               <h3 className="text-lg font-semibold mb-2">Description</h3>
               <p className="text-foreground/80">{event.description}</p>
             </div>
           </div>
         </div>
-        
+
         <DialogFooter className="mt-6">
           <Button onClick={handleRSVP} size="lg">
-            RSVP to this Event
+            {
+              loading ? "Joining.." : " RSVP to this Event"
+            }
+
           </Button>
         </DialogFooter>
       </DialogContent>
