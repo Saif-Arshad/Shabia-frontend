@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { X, Menu, ChevronDown, User, LogOut } from "lucide-react";
+import { X, Menu, ChevronDown, User, LogOut, MessageCircle } from "lucide-react";
 import useAuth from "@/hooks/useAuth";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
@@ -58,6 +58,7 @@ const Header = () => {
           <NavItem to="/news">News</NavItem>
           <NavItem to="/events">Events</NavItem>
           <NavItem to="/jobs">Jobs</NavItem>
+          <NavItem to="/community">Community</NavItem>
         </nav>
 
         {/* Auth Buttons or User Dropdown */}
@@ -135,6 +136,9 @@ const Header = () => {
                   </NavItem>
                   <NavItem to="/jobs" className="text-base py-2" onClick={() => setIsOpen(false)}>
                     Jobs
+                  </NavItem>
+                  <NavItem to="/community" className="text-base py-2" onClick={() => setIsOpen(false)}>
+                    Community
                   </NavItem>
                 </nav>
               </div>

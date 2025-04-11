@@ -1,8 +1,20 @@
 
 import { useState, useEffect } from "react";
 
+interface AuthUser {
+  id?: string;
+  name?: string;
+  email?: string;
+  [key: string]: any;
+}
+
+interface AuthState {
+  user: AuthUser | null;
+  token: string | null;
+}
+
 const useAuth = () => {
-    const [auth, setAuth] = useState({ user: null, token: null });
+    const [auth, setAuth] = useState<AuthState>({ user: null, token: null });
 
     useEffect(() => {
         const storedAuth = localStorage.getItem("useer");
