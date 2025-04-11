@@ -1,33 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Briefcase, MapPin, Building, Clock, Filter, Search, BookOpen } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { Job } from "@/types/job";
+import JobDetailDialog from "../jobs/JobDetailDialog";
 
-const categories = [
-  "All",
-  "IT & Software", 
-  "Engineering",
-  "Education",
-  "Healthcare",
-  "Business",
-  "Marketing",
-];
 
-const jobsData = [
-  {
-    id: 4,
-    title: "Civil Engineer",
-    company: "Emirates Construction",
-    location: "Yas Island, Abu Dhabi",
-    type: "Contract",
-    category: "Engineering",
-    salary: "AED 15,000 - 20,000 / month",
-    posted: "5 days ago",
-    deadline: "July 10, 2023",
-    description: "Experienced Civil Engineer needed for our upcoming infrastructure projects across Abu Dhabi.",
-  },
-];
+
 
 const typeColors = {
   "Full-time": "success",
@@ -36,7 +17,8 @@ const typeColors = {
   "Internship": "primary",
 } as const;
 
-const JobCard = ({ job }: { job: typeof jobsData[0] }) => (
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const JobCard = ({ job, onView }: any) => (
   <Card>
     <CardHeader>
       <div className="flex justify-between items-start">
@@ -47,7 +29,7 @@ const JobCard = ({ job }: { job: typeof jobsData[0] }) => (
             <span className="text-foreground/80">{job.company}</span>
           </div>
         </div>
-        <Badge 
+        <Badge
         >
           {job.type}
         </Badge>
@@ -64,34 +46,48 @@ const JobCard = ({ job }: { job: typeof jobsData[0] }) => (
           <Briefcase className="h-4 w-4 text-muted-foreground mt-0.5 mr-2" />
           <span>{job.salary}</span>
         </div>
-        <div className="flex items-start">
-          <Clock className="h-4 w-4 text-muted-foreground mt-0.5 mr-2" />
-          <span>Posted {job.posted} • Apply by {job.deadline}</span>
-        </div>
+       
       </div>
     </CardContent>
     <CardFooter className="flex justify-between">
       <Badge variant="outline" >
         {job.category}
       </Badge>
-      <Button variant="default" size="sm" >
-        Apply Now <BookOpen className="h-4 w-4" />
+      <Button
+        className="w-24"
+        onClick={onView}
+      >
+        View Details
       </Button>
     </CardFooter>
   </Card>
 );
 
 const JobBoard = () => {
-  const [activeCategory, setActiveCategory] = useState("All");
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const filteredJobs = jobsData.filter(
-    (job) =>
-      (activeCategory === "All" || job.category === activeCategory) &&
-      (job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        job.company.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
-
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const fetchJobs = async () => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/jobs`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch jobs");
+      }
+      const data = await response.json();
+      setJobs(data.jobs.slice(0, 3));
+    } catch (error) {
+      console.error("Error fetching jobs:", error);
+      toast.error("Failed to fetch jobs");
+    }
+  };
+  const handleViewJob = (job: Job) => {
+    setSelectedJob(job);
+    setIsDetailOpen(true);
+  };
+  useEffect(() => {
+    fetchJobs();
+  }, []);
   return (
     <section className="section-container bg-secondary/50" id="jobs">
       <div className="mb-12 text-center">
@@ -101,64 +97,27 @@ const JobBoard = () => {
         </p>
       </div>
 
-      <div className="flex flex-col md:flex-row justify-between mb-8 space-y-4 md:space-y-0">
-        <div className="flex overflow-x-auto pb-2 md:pb-0 hide-scrollbar">
-          <div className="flex space-x-2">
-            {categories.map((category) => (
-              <button
-                key={category}
-                className={`px-4 py-2 rounded-full text-sm transition-all whitespace-nowrap ${
-                  activeCategory === category
-                    ? "bg-primary text-white"
-                    : "bg-white hover:bg-secondary"
-                }`}
-                onClick={() => setActiveCategory(category)}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
-        </div>
 
-        <div className="relative w-full md:w-64">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Search className="h-4 w-4 text-muted-foreground" />
-          </div>
-          <input
-            type="text"
-            className="pl-10 pr-4 py-2 w-full rounded-md border border-input bg-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
-            placeholder="Search jobs..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {filteredJobs.map((job) => (
-          <div 
-            key={job.id} 
+        {jobs.map((job) => (
+          <div
+            key={job.id}
             className="transform transition-all duration-300 hover:-translate-y-1"
           >
-            <JobCard job={job} />
+            <JobCard
+              onView={() => handleViewJob(job)}
+              job={job} />
           </div>
         ))}
       </div>
 
-      <div className="mt-12 text-center">
-        <Button 
-          variant="outline" 
-          size="lg" 
-        >
-          Browse All Jobs <Filter className="h-4 w-4" />
-        </Button> 
-        <Button 
-          size="lg" 
-          className="ml-4" 
-        >
-          Post a Job <Briefcase className="h-4 w-4" />
-        </Button>
-      </div>
+      <JobDetailDialog
+        isOpen={isDetailOpen}
+        onClose={() => setIsDetailOpen(false)}
+        job={selectedJob}
+      />
+
     </section>
   );
 };

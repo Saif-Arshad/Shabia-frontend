@@ -52,10 +52,7 @@ const JobDetailDialog = ({ isOpen, onClose, job }: JobDetailDialogProps) => {
                   <Briefcase className="h-5 w-5 mr-3 text-primary" />
                   <span>{job.salary}</span>
                 </div>
-                <div className="flex items-center">
-                  <Clock className="h-5 w-5 mr-3 text-primary" />
-                  <span>Posted {job.posted} • Apply by {job.deadline}</span>
-                </div>
+              
               </div>
             </div>
 

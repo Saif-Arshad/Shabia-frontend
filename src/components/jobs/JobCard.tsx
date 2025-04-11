@@ -55,10 +55,6 @@ const JobCard = ({ job, onEdit, onDelete, onView, isManagement = false }: JobCar
             <Briefcase className="h-4 w-4 mr-2 text-primary" />
             <span>{job.salary}</span>
           </div>
-          <div className="flex items-center">
-            <Clock className="h-4 w-4 mr-2 text-primary" />
-            <span>Posted {job.posted} • Apply by {job.deadline}</span>
-          </div>
         </div>
       </CardContent>
       <CardFooter>

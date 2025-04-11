@@ -1,9 +1,7 @@
-
 import React, { useState, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Calendar } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -22,8 +20,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import uploadToCloudinary from "@/lib/upload";
 import { toast } from "sonner";
 import { Job } from "@/types/job";
 
@@ -35,7 +31,6 @@ const formSchema = z.object({
   category: z.string().min(1, { message: "Category is required" }),
   salary: z.string().min(1, { message: "Salary is required" }),
   description: z.string().min(10, { message: "Description must be at least 10 characters" }),
-  deadline: z.string().min(1, { message: "Deadline is required" }),
 });
 
 const jobTypes = ["Full-time", "Part-time", "Contract", "Internship", "Freelance"];
@@ -44,13 +39,14 @@ const jobCategories = ["IT & Software", "Engineering", "Education", "Healthcare"
 interface JobFormProps {
   isOpen: boolean;
   onClose: () => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onSubmit: (data: any) => void;
   job?: Job | null;
 }
 
 const JobFormDialog = ({ isOpen, onClose, onSubmit, job }: JobFormProps) => {
   const [loading, setLoading] = useState(false);
-  
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -61,7 +57,6 @@ const JobFormDialog = ({ isOpen, onClose, onSubmit, job }: JobFormProps) => {
       category: "IT & Software",
       salary: "",
       description: "",
-      deadline: new Date().toISOString().split("T")[0],
     },
   });
 
@@ -75,7 +70,6 @@ const JobFormDialog = ({ isOpen, onClose, onSubmit, job }: JobFormProps) => {
         category: job.category,
         salary: job.salary,
         description: job.description,
-        deadline: job.deadline,
       });
     } else {
       form.reset({
@@ -86,7 +80,6 @@ const JobFormDialog = ({ isOpen, onClose, onSubmit, job }: JobFormProps) => {
         category: "IT & Software",
         salary: "",
         description: "",
-        deadline: new Date().toISOString().split("T")[0],
       });
     }
   }, [job, form]);
@@ -94,13 +87,14 @@ const JobFormDialog = ({ isOpen, onClose, onSubmit, job }: JobFormProps) => {
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     setLoading(true);
     try {
+      // Optional: format date or add additional properties
       const today = new Date();
       const formattedDate = today.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-      
+
       const jobData = {
         ...values,
-        posted: formattedDate,
-        id: job?.id || Date.now(),
+        posted: formattedDate, // if needed on the frontend
+        id: job?.id, // Only for editing; backend will auto-generate a new id on creation
       };
 
       onSubmit(jobData);
@@ -228,23 +222,6 @@ const JobFormDialog = ({ isOpen, onClose, onSubmit, job }: JobFormProps) => {
                   </FormItem>
                 )}
               />
-
-              <FormField
-                control={form.control}
-                name="deadline"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Application Deadline*</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <Input type="date" {...field} />
-                        <Calendar className="absolute right-3 top-3 h-4 w-4 text-gray-400" />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
             </div>
 
             <FormField
@@ -266,17 +243,10 @@ const JobFormDialog = ({ isOpen, onClose, onSubmit, job }: JobFormProps) => {
             />
 
             <div className="flex justify-end gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={onClose}
-              >
+              <Button type="button" variant="outline" onClick={onClose}>
                 Cancel
               </Button>
-              <Button
-                type="submit"
-                disabled={loading}
-              >
+              <Button type="submit" disabled={loading}>
                 {loading ? "Submitting..." : job ? "Update Job" : "Post Job"}
               </Button>
             </div>

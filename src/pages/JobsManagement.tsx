@@ -1,4 +1,4 @@
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
 import { PlusCircle, Briefcase } from "lucide-react";
 import Header from "@/components/layout/Header";
@@ -10,35 +10,6 @@ import JobDetailDialog from "@/components/jobs/JobDetailDialog";
 import { Job } from "@/types/job";
 import { toast } from "sonner";
 import useAuth from "@/hooks/useAuth";
-
-const mockJobs = [
-  {
-    id: 1,
-    title: "Software Engineer",
-    company: "TechCorp",
-    location: "Abu Dhabi, UAE",
-    type: "Full-time",
-    category: "IT & Software",
-    salary: "AED 18,000 - 25,000 / month",
-    posted: "April 1, 2025",
-    deadline: "May 15, 2025",
-    description: "We are looking for an experienced Software Engineer to join our team. You will be responsible for developing and maintaining web applications.",
-    createdBy: 1
-  },
-  {
-    id: 2,
-    title: "Marketing Manager",
-    company: "Global Marketing",
-    location: "Dubai, UAE",
-    type: "Full-time",
-    category: "Marketing",
-    salary: "AED 15,000 - 20,000 / month",
-    posted: "April 3, 2025",
-    deadline: "April 30, 2025",
-    description: "We are seeking a creative Marketing Manager to lead our marketing team and develop marketing strategies to promote our products and services.",
-    createdBy: 1
-  }
-];
 
 const JobsManagement = () => {
   const { user } = useAuth();
@@ -58,13 +29,12 @@ const JobsManagement = () => {
   const fetchJobs = async () => {
     setLoading(true);
     try {
-      // In a real app, you would fetch jobs from the backend
-      // const response = await fetch(`${BACKEND_URL}/jobs`);
-      // const data = await response.json();
-      // setJobs(data.jobs);
-      
-      // For now, use mock data
-      setJobs(mockJobs);
+      const response = await fetch(`${BACKEND_URL}/jobs/creator/${user.id}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch jobs");
+      }
+      const data = await response.json();
+      setJobs(data.jobs);
     } catch (error) {
       console.error("Error fetching jobs:", error);
       toast.error("Failed to fetch jobs");
@@ -75,24 +45,18 @@ const JobsManagement = () => {
 
   const handleCreateJob = async (jobData: any) => {
     try {
-      // In a real app, you would POST to the backend
-      // const response = await fetch(`${BACKEND_URL}/jobs`, {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify(jobData),
-      // });
-      // const data = await response.json();
-      
-      // For now, add to the local state
-      const newJob = {
-        ...jobData,
-        id: Date.now(),
-        createdBy: user?.id,
-      };
-      
-      setJobs([newJob, ...jobs]);
+      const response = await fetch(`${BACKEND_URL}/jobs`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...jobData, createdBy: user?.id }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to create job");
+      }
+      const data = await response.json();
+      setJobs([data.job, ...jobs]);
       toast.success("Job posted successfully!");
       setIsFormOpen(false);
     } catch (error) {
@@ -103,21 +67,21 @@ const JobsManagement = () => {
 
   const handleEditJob = async (jobData: any) => {
     try {
-      // In a real app, you would PUT to the backend
-      // const response = await fetch(`${BACKEND_URL}/jobs/${jobData.id}`, {
-      //   method: "PUT",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify(jobData),
-      // });
-      // const data = await response.json();
-      
-      // For now, update the local state
+      const response = await fetch(`${BACKEND_URL}/jobs/${jobData.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(jobData),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to update job");
+      }
+      const data = await response.json();
+      const updatedJob = data.job;
       const updatedJobs = jobs.map((job) =>
-        job.id === jobData.id ? { ...job, ...jobData } : job
+        job.id === updatedJob.id ? updatedJob : job
       );
-      
       setJobs(updatedJobs);
       toast.success("Job updated successfully!");
       setIsFormOpen(false);
@@ -130,14 +94,14 @@ const JobsManagement = () => {
 
   const handleDeleteJob = async (jobId: number) => {
     if (!confirm("Are you sure you want to delete this job?")) return;
-    
     try {
-      // In a real app, you would DELETE to the backend
-      // await fetch(`${BACKEND_URL}/jobs/${jobId}`, {
-      //   method: "DELETE",
-      // });
-      
-      // For now, update the local state
+      const response = await fetch(`${BACKEND_URL}/jobs/${jobId}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        throw new Error("Failed to delete job");
+      }
+      await response.json();
       setJobs(jobs.filter((job) => job.id !== jobId));
       toast.success("Job deleted successfully!");
     } catch (error) {
@@ -168,7 +132,9 @@ const JobsManagement = () => {
         <main className="flex-grow pt-24 px-4">
           <div className="max-w-md mx-auto text-center p-8 border rounded-lg shadow-sm">
             <h1 className="text-2xl font-bold mb-4">Access Denied</h1>
-            <p className="text-muted-foreground mb-6">You need to be logged in to view this page.</p>
+            <p className="text-muted-foreground mb-6">
+              You need to be logged in to view this page.
+            </p>
             <Button asChild>
               <a href="/login">Login</a>
             </Button>
@@ -187,7 +153,9 @@ const JobsManagement = () => {
           <div className="flex justify-between items-center mb-8">
             <div>
               <h1 className="text-3xl font-bold">Manage Jobs</h1>
-              <p className="text-muted-foreground">Create and manage job posts for the community</p>
+              <p className="text-muted-foreground">
+                Create and manage job posts for the community
+              </p>
             </div>
             <Button onClick={openCreateForm}>
               <PlusCircle className="mr-2 h-4 w-4" />
@@ -217,7 +185,9 @@ const JobsManagement = () => {
             <div className="text-center py-12 border rounded-lg bg-muted/30">
               <Briefcase className="mx-auto h-10 w-10 text-muted-foreground mb-2" />
               <h3 className="text-lg font-medium">No jobs posted yet</h3>
-              <p className="text-muted-foreground mb-4">Post your first job to help community members find opportunities</p>
+              <p className="text-muted-foreground mb-4">
+                Post your first job to help community members find opportunities
+              </p>
               <Button onClick={openCreateForm}>Post a Job</Button>
             </div>
           )}
@@ -230,7 +200,6 @@ const JobsManagement = () => {
         onSubmit={selectedJob ? handleEditJob : handleCreateJob}
         job={selectedJob}
       />
-
       <JobDetailDialog
         isOpen={isViewOpen}
         onClose={() => setIsViewOpen(false)}

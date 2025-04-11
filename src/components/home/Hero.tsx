@@ -42,28 +42,7 @@ const Hero = () => {
             Connect with local services, stay updated with community news, find events, and discover job opportunities in Abu Dhabi.
           </p>
 
-          <div className="w-full max-w-2xl mx-auto mb-12">
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search className="h-5 w-5 text-muted-foreground" />
-              </div>
-              <input
-                type="text"
-                className="block w-full pl-10 pr-3 py-4 bg-white dark:bg-slate-800 border border-input rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
-                placeholder="Search for local services, events, news..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5">
-                <Button
-                  size="sm"
-                  className="inline-flex items-center rounded-lg px-4"
-                >
-                  Search <ArrowRight className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          </div>
+        
         </div>
 
         <div
