@@ -1,56 +1,77 @@
-
-import React, { useState, useEffect } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useState, useEffect, useRef } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { MessageCircle, Send } from "lucide-react";
 import useAuth from "@/hooks/useAuth";
 import Layout from "@/components/layout/Layout";
+import io from "socket.io-client";
 
-// Mock data for messages - in a real app, this would come from a database
-const initialMessages = [
-  {
-    id: "1",
-    userId: "user1",
-    userName: "Jane Cooper",
-    content: "Hello everyone! I'm new to this community.",
-    timestamp: new Date(Date.now() - 60000 * 60).toISOString(),
-  },
-  {
-    id: "2",
-    userId: "user2",
-    userName: "Alex Johnson",
-    content: "Welcome, Jane! Great to have you here. Feel free to ask any questions.",
-    timestamp: new Date(Date.now() - 30000 * 60).toISOString(),
-  },
-  {
-    id: "3",
-    userId: "user3",
-    userName: "Sarah Williams",
-    content: "Has anyone attended the community meetup last weekend?",
-    timestamp: new Date(Date.now() - 15000 * 60).toISOString(),
-  },
-];
 
-interface Message {
-  id: string;
-  userId: string;
-  userName: string;
-  content: string;
-  timestamp: string;
-}
 
 const Community = () => {
-  const [messages, setMessages] = useState<Message[]>(initialMessages);
+  const [messages, setMessages] = useState<any[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const { user } = useAuth();
   const { toast } = useToast();
+  const socketRef = useRef<any>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const SOCKET_SERVER_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:8000";
+
+  const fetchMessages = async () => {
+    try {
+      const response = await fetch(`${SOCKET_SERVER_URL}/user/messages`);
+      if (!response.ok) throw new Error("Failed to fetch messages");
+      const data = await response.json();
+      console.log("🚀 ~ fetchMessages ~ data:", data)
+      setMessages(data);
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+      toast({
+        title: "Error",
+        description: "Failed to load messages",
+        variant: "destructive",
+      });
+    }
+  };
+
+  useEffect(() => {
+    fetchMessages();
+  }, []);
+
+  useEffect(() => {
+    socketRef.current = io(SOCKET_SERVER_URL);
+
+    socketRef.current.on("newMessage", (message: any) => {
+      setMessages((prevMessages) => [...prevMessages, message]);
+    });
+
+    socketRef.current.on("errorMessage", (errorMsg: string) => {
+      console.error("Socket error:", errorMsg);
+      toast({
+        title: "Error",
+        description: errorMsg,
+        variant: "destructive",
+      });
+    });
+
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+      }
+    };
+  }, [SOCKET_SERVER_URL, toast]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   const handleSendMessage = () => {
     if (!newMessage.trim()) return;
-    
+
     if (!user) {
       toast({
         title: "Authentication required",
@@ -60,17 +81,15 @@ const Community = () => {
       return;
     }
 
-    const message: Message = {
-      id: Date.now().toString(),
-      userId: user.id || "current-user",
-      userName: user.name || "You",
-      content: newMessage,
-      timestamp: new Date().toISOString(),
+    const messageData = {
+      createdBy: user.id,
+      message: newMessage,
     };
 
-    setMessages([...messages, message]);
+    socketRef.current.emit("sendMessage", messageData);
+
     setNewMessage("");
-    
+
     toast({
       title: "Message sent",
       description: "Your message has been posted to the community",
@@ -79,8 +98,11 @@ const Community = () => {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + 
-           ' ' + date.toLocaleDateString();
+    return (
+      date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) +
+      " " +
+      date.toLocaleDateString()
+    );
   };
 
   return (
@@ -104,20 +126,24 @@ const Community = () => {
 
             <div className="h-96 overflow-y-auto p-4 space-y-4">
               {messages.map((message) => (
-                <Card key={message.id} className={`${
-                  user && message.userId === (user.id || "current-user") 
-                    ? "ml-auto bg-primary/10" 
+                <Card
+                  key={message.id}
+                  className={`${user && message.createdBy === user.id
+                    ? "ml-auto bg-primary/10"
                     : "mr-auto"
-                  } max-w-[85%]`}>
+                    } max-w-[85%]`}
+                >
                   <CardContent className="p-3">
                     <div className="flex justify-between items-start mb-1">
-                      <span className="font-semibold text-sm">{message.userName}</span>
-                      <span className="text-xs text-muted-foreground">{formatDate(message.timestamp)}</span>
+                      <span className="font-semibold text-sm">{message.user.name}</span>
+                      <span className="text-xs text-muted-foreground">{formatDate(message.createdAt)}</span>
                     </div>
-                    <p className="text-sm">{message.content}</p>
+                    <p className="text-sm">{message.message}</p>
                   </CardContent>
                 </Card>
               ))}
+              {/* This empty div serves as the scroll target */}
+              <div ref={messagesEndRef} />
             </div>
 
             <CardFooter className="border-t p-3">
@@ -135,8 +161,8 @@ const Community = () => {
                     }
                   }}
                 />
-                <Button 
-                  onClick={handleSendMessage} 
+                <Button
+                  onClick={handleSendMessage}
                   disabled={!user || !newMessage.trim()}
                   size="icon"
                 >
