@@ -90,6 +90,23 @@ const Dashboard = () => {
                 </CardContent>
               </Card>
             </Link>
+
+            <Link to="/dashboard/jobs" className="block">
+              <Card className="h-full transition-all hover:shadow-md">
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Briefcase className="mr-2 h-5 w-5 text-primary" />
+                    Manage Jobs
+                  </CardTitle>
+                  <CardDescription>Create and manage job listings</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-500">
+                    Post, edit, and delete job opportunities for the community
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
           </div>
         </div>
       </main>
