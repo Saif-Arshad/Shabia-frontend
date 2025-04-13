@@ -62,7 +62,19 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				// Add beige theme colors
+				beige: {
+					100: '#f5f0e6',
+					200: '#ece3d3',
+					300: '#e3d6c0',
+					400: '#d9c9ae',
+					500: '#cfbc9c',
+					600: '#c5af8a',
+					700: '#bba277',
+					800: '#a48c67',
+					900: '#8c7657',
+				},
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

@@ -7,83 +7,83 @@
 
 @layer base {
   :root {
-    --background: 210 40% 98%;
-    --foreground: 200 20% 15%;
+    --background: 38 40% 97%;
+    --foreground: 30 25% 25%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 200 20% 15%;
+    --card: 36 35% 99%;
+    --card-foreground: 30 25% 25%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 200 20% 15%;
+    --popover: 36 35% 99%;
+    --popover-foreground: 30 25% 25%;
 
-    --primary: 210 100% 50%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 30 30% 60%;
+    --primary-foreground: 30 25% 98%;
 
-    --secondary: 200 15% 95%;
-    --secondary-foreground: 200 20% 25%;
+    --secondary: 30 20% 94%;
+    --secondary-foreground: 30 25% 30%;
 
-    --muted: 200 20% 96%;
-    --muted-foreground: 200 20% 40%;
+    --muted: 30 20% 94%;
+    --muted-foreground: 30 15% 45%;
 
-    --accent: 198 60% 55%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 32 40% 85%;
+    --accent-foreground: 30 25% 25%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 38 40% 97%;
 
-    --border: 200 30% 92%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 210 70% 50%;
+    --border: 30 25% 90%;
+    --input: 30 25% 90%;
+    --ring: 30 30% 60%;
 
     --radius: 0.75rem;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 36 35% 97%;
+    --sidebar-foreground: 30 15% 30%;
+    --sidebar-primary: 30 30% 60%;
+    --sidebar-primary-foreground: 30 25% 98%;
+    --sidebar-accent: 30 20% 92%;
+    --sidebar-accent-foreground: 30 15% 30%;
+    --sidebar-border: 30 20% 88%;
+    --sidebar-ring: 30 30% 60%;
   }
 
   .dark {
-    --background: 200 30% 8%;
-    --foreground: 200 10% 90%;
+    --background: 30 15% 15%;
+    --foreground: 30 10% 90%;
 
-    --card: 200 25% 12%;
-    --card-foreground: 200 10% 90%;
+    --card: 30 15% 18%;
+    --card-foreground: 30 10% 90%;
 
-    --popover: 200 25% 12%;
-    --popover-foreground: 200 10% 90%;
+    --popover: 30 15% 18%;
+    --popover-foreground: 30 10% 90%;
 
-    --primary: 210 100% 50%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 30 30% 60%;
+    --primary-foreground: 30 10% 98%;
 
-    --secondary: 200 25% 18%;
-    --secondary-foreground: 200 10% 80%;
+    --secondary: 30 15% 25%;
+    --secondary-foreground: 30 10% 80%;
 
-    --muted: 200 25% 18%;
-    --muted-foreground: 200 10% 60%;
+    --muted: 30 15% 25%;
+    --muted-foreground: 30 10% 60%;
 
-    --accent: 198 60% 45%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 32 25% 35%;
+    --accent-foreground: 30 10% 90%;
 
     --destructive: 0 62.8% 50.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 30 10% 98%;
 
-    --border: 200 25% 18%;
-    --input: 200 25% 18%;
-    --ring: 210 70% 50%;
+    --border: 30 15% 25%;
+    --input: 30 15% 25%;
+    --ring: 30 30% 60%;
 
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-background: 30 15% 12%;
+    --sidebar-foreground: 30 10% 85%;
+    --sidebar-primary: 30 30% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 30 15% 20%;
+    --sidebar-accent-foreground: 30 10% 85%;
+    --sidebar-border: 30 15% 22%;
+    --sidebar-ring: 30 30% 55%;
   }
 }
 
@@ -109,11 +109,11 @@
 
 @layer components {
   .glass-panel {
-    @apply bg-white bg-opacity-80 backdrop-blur-lg rounded-2xl border border-white border-opacity-20;
+    @apply bg-beige-100 bg-opacity-80 backdrop-blur-lg rounded-2xl border border-beige-200 border-opacity-20;
   }
 
   .dark .glass-panel {
-    @apply bg-black bg-opacity-30 backdrop-blur-lg border-black border-opacity-10;
+    @apply bg-beige-900 bg-opacity-30 backdrop-blur-lg border-beige-800 border-opacity-10;
   }
   
   .hover-card-effect {
@@ -122,7 +122,7 @@
   
   .hover-card-effect:hover {
     transform: translateY(-4px) scale(1.01);
-    box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 25px -3px rgba(138, 110, 89, 0.1);
   }
   
   .dark .hover-card-effect:hover {
