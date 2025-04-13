@@ -27,11 +27,10 @@ const NavItem = ({ to, children, className = "", onClick }: NavItemProps) => {
   return (
     <Link
       to={to}
-      className={`text-sm font-medium transition-colors ${
-        isActive
-          ? "text-foreground"
-          : "text-muted-foreground hover:text-foreground"
-      } ${className}`}
+      className={`text-sm font-medium transition-colors ${isActive
+        ? "text-foreground"
+        : "text-muted-foreground hover:text-foreground"
+        } ${className}`}
       onClick={onClick}
     >
       {children}
@@ -48,7 +47,7 @@ const Header = () => {
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center">
-          <span className="text-xl font-bold">Shabia</span>
+          <img src="/SHABIA LOGO-01.png" alt="" className="h-16 object-contain w-auto" />
         </Link>
 
         {/* Desktop Navigation */}

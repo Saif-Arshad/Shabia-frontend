@@ -63,7 +63,6 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Add beige theme colors
 				beige: {
 					100: '#f5f0e6',
 					200: '#ece3d3',

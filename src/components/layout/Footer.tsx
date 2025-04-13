@@ -10,9 +10,9 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <div className="space-y-4">
             <Link to="/" className="inline-flex">
-              <span className="text-xl font-bold tracking-tight text-primary">
-                Shabia<span className="text-accent"></span>
-              </span>
+              <img src="/SHABIA LOGO-01.png" alt="" className="h-24 object-contain w-auto" />
+
+           
             </Link>
             <p className="text-sm text-muted-foreground">
               Connecting Abu Dhabi communities with local services, events, and job opportunities.
@@ -97,13 +97,13 @@ const Footer = () => {
             </h3>
             <ul className="space-y-3">
               <li className="flex">
-                <MapPin className="h-5 w-5 text-accent mr-2 flex-shrink-0" />
+                <MapPin className="h-5 w-5 text-primary mr-2 flex-shrink-0" />
                 <span className="text-muted-foreground">
                   Abu Dhabi, United Arab Emirates
                 </span>
               </li>
               <li className="flex">
-                <Mail className="h-5 w-5 text-accent mr-2 flex-shrink-0" />
+                <Mail className="h-5 w-5 text-primary mr-2 flex-shrink-0" />
                 <a
                   href="mailto:info@abuconnect.ae"
                   className="text-muted-foreground hover:text-primary transition-colors"
@@ -112,7 +112,7 @@ const Footer = () => {
                 </a>
               </li>
               <li className="flex">
-                <Phone className="h-5 w-5 text-accent mr-2 flex-shrink-0" />
+                <Phone className="h-5 w-5 text-primary mr-2 flex-shrink-0" />
                 <a
                   href="tel:+97112345678"
                   className="text-muted-foreground hover:text-primary transition-colors"

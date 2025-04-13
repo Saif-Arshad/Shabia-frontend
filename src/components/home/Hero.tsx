@@ -18,8 +18,8 @@ const Hero = () => {
   return (
     <div className="relative bg-gradient-to-b from-blue-50 to-white dark:from-slate-900 dark:to-slate-800 pt-20 min-h-screen flex items-center">
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute opacity-30 w-96 h-96 bg-blue-400 rounded-full blur-3xl -top-10 -left-16"></div>
-        <div className="absolute opacity-20 w-96 h-96 bg-teal-300 rounded-full blur-3xl -bottom-20 -right-16"></div>
+        <div className="absolute opacity-30 w-96 h-96 bg-yellow-10 rounded-full blur-3xl -top-10 -left-16"></div>
+        <div className="absolute opacity-20 w-96 h-96 bg-yellow-200 rounded-full blur-3xl -bottom-20 -right-16"></div>
       </div>
 
       <div className="section-container relative z-10 flex flex-col items-center justify-center min-h-[80vh]">

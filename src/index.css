@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 @tailwind base;
@@ -7,7 +6,7 @@
 
 @layer base {
   :root {
-    --background: 38 40% 97%;
+    --background: 38 40% 99%;
     --foreground: 30 25% 25%;
 
     --card: 36 35% 99%;
@@ -16,7 +15,7 @@
     --popover: 36 35% 99%;
     --popover-foreground: 30 25% 25%;
 
-    --primary: 30 30% 60%;
+    --primary: 30 30% 30%;
     --primary-foreground: 30 25% 98%;
 
     --secondary: 30 20% 94%;
@@ -102,7 +101,12 @@
     transition: background-color 0.2s ease, color 0.2s ease;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-display tracking-tight;
   }
 }
@@ -115,16 +119,16 @@
   .dark .glass-panel {
     @apply bg-beige-900 bg-opacity-30 backdrop-blur-lg border-beige-800 border-opacity-10;
   }
-  
+
   .hover-card-effect {
     transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   }
-  
+
   .hover-card-effect:hover {
     transform: translateY(-4px) scale(1.01);
     box-shadow: 0 10px 25px -3px rgba(138, 110, 89, 0.1);
   }
-  
+
   .dark .hover-card-effect:hover {
     box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.3);
   }
@@ -132,15 +136,15 @@
   .text-balance {
     text-wrap: balance;
   }
-  
+
   .section-container {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20;
   }
-  
+
   .section-title {
     @apply text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 sm:mb-10 text-center;
   }
-  
+
   .section-subtitle {
     @apply text-xl text-muted-foreground max-w-3xl mx-auto text-center mb-10 sm:mb-16;
   }
@@ -149,33 +153,34 @@
     opacity: 0;
     transform: translateY(10px);
   }
-  
+
   .page-transition-enter-active {
     opacity: 1;
     transform: translateY(0);
     transition: opacity 0.3s, transform 0.3s;
   }
-  
+
   .page-transition-exit {
     opacity: 1;
     transform: translateY(0);
   }
-  
+
   .page-transition-exit-active {
     opacity: 0;
     transform: translateY(-10px);
     transition: opacity 0.3s, transform 0.3s;
   }
-  
+
   .reveal-animation {
     animation: reveal 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  
+
   @keyframes reveal {
     from {
       opacity: 0;
       transform: translateY(20px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
