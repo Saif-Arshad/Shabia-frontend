@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Input } from "@/components/custom/Input";
 import { Button } from "@/components/custom/Button";
-import { User, Lock, Mail, UserPlus } from "lucide-react";
+import { User, Lock, Mail, UserPlus, MapPin } from "lucide-react";
 import { toast } from "sonner";
 import axios from 'axios'
 const Register = () => {
@@ -11,11 +11,13 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false)
   const [password, setPassword] = useState("");
+  const [userType, setUserType] = useState("USER");
+  const [location, setLocation] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate()
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !email.trim() || !password || !confirmPassword) {
+    if (!name.trim() || !email.trim() || !password || !confirmPassword || !password) {
       toast.error("All fields are required");
       return;
     }
@@ -39,14 +41,16 @@ const Register = () => {
     const payload = {
       email,
       name,
-      password
+      password,
+      location,
+      userType
     }
     setLoading(true)
     try {
       const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/signup`, payload)
       if (res.data) {
         toast.success("Register Successful")
-        navigate("/login")
+        navigate(`/verify?email=${email}`)
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -72,7 +76,33 @@ const Register = () => {
         <div className="mt-8 bg-white py-8 px-4 shadow-lg sm:rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Account Type</label>
+                <div className="flex gap-4">
+                  <button
+                    type="button"
+                    onClick={() => setUserType('USER')}
+                    className={`flex-1 py-2 px-4 rounded-md border ${
+                      userType === 'USER'
+                        ? 'bg-primary text-white border-primary'
+                        : 'bg-white text-gray-700 border-gray-300 hover:border-primary'
+                    }`}
+                  >
+                    User
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setUserType('BUSINESS')}
+                    className={`flex-1 py-2 px-4 rounded-md border ${
+                      userType === 'BUSINESS'
+                        ? 'bg-primary text-white border-primary'
+                        : 'bg-white text-gray-700 border-gray-300 hover:border-primary'
+                    }`}
+                  >
+                    Business
+                  </button>
+                </div>
+              </div> <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                 Full Name
               </label>
               <div className="mt-1 relative rounded-md shadow-sm">
@@ -114,7 +144,27 @@ const Register = () => {
                 />
               </div>
             </div>
-
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                Your Location
+              </label>
+              <div className="mt-1 relative rounded-md shadow-sm">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <MapPin className="h-5 w-5 text-gray-400" />
+                </div>
+                <Input
+                  id="locatino"
+                  name="locatino"
+                  type="text"
+                  autoComplete="location"
+                  required
+                  className="pl-10"
+                  placeholder="Enter your location"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                />
+              </div>
+            </div>
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                 Password
@@ -183,10 +233,10 @@ const Register = () => {
               <Button type="submit" className="w-full flex justify-center">
                 {
                   loading ? "Loading"
-                  :
-                  <>
-                Create Account <UserPlus className="ml-2 h-4 w-4" />
-                  </>
+                    :
+                    <>
+                      Create Account <UserPlus className="ml-2 h-4 w-4" />
+                    </>
                 }
               </Button>
             </div>

@@ -45,18 +45,12 @@ const Header = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-40 bg-background border-b border-border backdrop-blur-md bg-opacity-80">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-        {/* Logo */}
         <Link to="/" className="flex items-center">
-          <img src="/SHABIA LOGO-01.png" alt="" className="h-16 object-contain w-auto" />
+          <img src="/2.png" alt="" className="h-14 object-contain w-auto" />
         </Link>
 
-        {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-8">
           <NavItem to="/">Home</NavItem>
-          <NavItem to="/local-services">Services</NavItem>
-          <NavItem to="/news">News</NavItem>
-          <NavItem to="/events">Events</NavItem>
-          <NavItem to="/jobs">Jobs</NavItem>
           <NavItem to="/community">Community</NavItem>
         </nav>
 
@@ -80,6 +74,12 @@ const Header = () => {
                   <DropdownMenuItem className="cursor-pointer">
                     <User className="mr-2 h-4 w-4" />
                     <span>Dashboard</span>
+                  </DropdownMenuItem>
+                </Link>
+                <Link to="/dashboard/post">
+                  <DropdownMenuItem className="cursor-pointer">
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Manage Posts</span>
                   </DropdownMenuItem>
                 </Link>
                 <DropdownMenuSeparator />

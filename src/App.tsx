@@ -16,8 +16,10 @@ import NewsList from "./pages/NewsList";
 import EventsManagement from "./pages/EventsManagement";
 import EventsList from "./pages/EventsList";
 import JobsManagement from "./pages/JobsManagement";
+import PostsManagement from "./pages/PostsManagement";
 import JobsList from "./pages/JobsList";
 import Community from "./pages/Community";
+import Verify from "./pages/Verify";
 
 const queryClient = new QueryClient();
 
@@ -31,9 +33,11 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/verify" element={<Verify />} />
           <Route path="/local-services" element={<LocalServices />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/services" element={<Services />} />
+          <Route path="/dashboard/post" element={<PostsManagement />} />
           <Route path="/dashboard/news" element={<NewsManagement />} />
           <Route path="/dashboard/events" element={<EventsManagement />} />
           <Route path="/dashboard/jobs" element={<JobsManagement />} />
