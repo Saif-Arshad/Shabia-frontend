@@ -14,6 +14,7 @@ import Verify from "./pages/Verify";
 import AddPost from "./pages/AddPost";
 import Users from "./pages/users";
 import Group from "./pages/Group";
+import GroupsCommunity from "./pages/GroupsCommunity";
 
 const queryClient = new QueryClient();
 
@@ -33,7 +34,8 @@ const App = () => (
           <Route path="/dashboard/users" element={<Users />} />
           <Route path="/dashboard/groups" element={<Group />} />
           <Route path="/dashboard/post" element={<PostsManagement />} />
-          <Route path="/community" element={<Community />} />
+          <Route path="/community" element={<GroupsCommunity />} />
+          <Route path="/community/:id" element={<Community />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

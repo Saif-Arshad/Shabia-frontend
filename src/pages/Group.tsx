@@ -97,7 +97,7 @@ export default function Group() {
     // on form submit
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const payload = { ...form };
+        const payload = { ...form, adminId: user.id };
         try {
             if (isEditing) {
                 await axios.put(`${API}/groups/${currentGroup.id}`, payload);

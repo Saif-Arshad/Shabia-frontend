@@ -18,8 +18,37 @@ const Community = () => {
   const { toast } = useToast();
   const socketRef = useRef<any>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
+  const [group, setGroup] = useState<string | null>(null);
+  const [groupData, setGroupData] = useState<any>(null);
+  useEffect(() => {
+    const path = window.location.pathname;
+    const groupParam = path.split('/').pop();
+    console.log("🚀 ~ useEffect ~ groupParam:", groupParam)
+    setGroup(groupParam);
+  }, []);
   const SOCKET_SERVER_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:8000";
+
+  const fetchGroup = async () => {
+    try {
+      const response = await fetch(`${SOCKET_SERVER_URL}/groups/${group}`);
+      if (!response.ok) throw new Error("Failed to fetch group");
+      const data = await response.json();
+      console.log("🚀 ~ fetchGroup ~ data:", data)
+      setGroupData(data);
+    } catch (error) {
+      console.log("Error fetching group:", error);
+      toast({
+        title: "Error",
+        description: "Failed to load group",
+        variant: "destructive",
+      });
+    }
+  }
+  useEffect(() => {
+    if (group) {
+      fetchGroup()
+    }
+  }, [group])
 
   const fetchMessages = async () => {
     try {
@@ -27,7 +56,11 @@ const Community = () => {
       if (!response.ok) throw new Error("Failed to fetch messages");
       const data = await response.json();
       console.log("🚀 ~ fetchMessages ~ data:", data)
-      setMessages(data);
+      console.log("🚀 ~ fetchMessages ~ data:", group)
+      const filteredCUrrentGroupMessages = data.filter((message: any) => Number(message.groupId) == Number(group))
+      console.log("🚀 ~ fetchMessages ~ filteredCUrrentGroupMessages:", filteredCUrrentGroupMessages)
+
+      setMessages(filteredCUrrentGroupMessages);
     } catch (error) {
       console.error("Error fetching messages:", error);
       toast({
@@ -39,13 +72,18 @@ const Community = () => {
   };
 
   useEffect(() => {
-    fetchMessages();
-  }, []);
+    if(group){
+      fetchMessages();
+    }
+  }, [group]);
 
   useEffect(() => {
     socketRef.current = io(SOCKET_SERVER_URL);
 
     socketRef.current.on("newMessage", (message: any) => {
+      const isCurrentGroupMessage = Number(message.groupId) == Number(group);
+      console.log("🚀 ~ socketRef.current.on ~ isCurrentGroupMessage:", isCurrentGroupMessage)
+      if (!isCurrentGroupMessage) return;
       setMessages((prevMessages) => [...prevMessages, message]);
     });
 
@@ -84,6 +122,7 @@ const Community = () => {
     const messageData = {
       createdBy: user.id,
       message: newMessage,
+      groupId: group,
     };
 
     socketRef.current.emit("sendMessage", messageData);
@@ -109,12 +148,47 @@ const Community = () => {
     <Layout>
       <div className="container mx-auto px-4 py-16 md:py-24">
         <div className="space-y-6">
-          <div className="text-center">
+          {groupData && (
+            <div className="bg-white rounded-lg shadow p-6 max-w-4xl mx-auto">
+              <h1 className="text-3xl font-bold mb-2">{groupData.name}</h1>
+              <p className="text-sm text-muted-foreground mb-4">
+                {groupData.location1}, {groupData.location2}
+              </p>
+              <div className="flex gap-6 items-center text-sm">
+                <span>
+                  Created:{" "}
+                  {new Date(groupData.createdAt).toLocaleDateString()}
+                </span>
+                <span>
+                  Participants: {groupData.GroupParticipant?.length ?? 0}
+                </span>
+                <div className="flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-9 w-9 text-gray-400 mr-1"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  <div>
+                    <p className="text-sm font-medium">{groupData.admin.name}</p>
+                    <p className="text-xs text-gray-500">{groupData.admin.email}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          {/* <div className="text-center">
             <h1 className="text-4xl font-bold">Community Messages</h1>
             <p className="mt-2 text-lg text-muted-foreground">
               Connect with other community members
             </p>
-          </div>
+          </div> */}
 
           <div className="bg-card border rounded-lg shadow-sm overflow-hidden max-w-4xl mx-auto">
             <div className="p-4 border-b bg-muted/50">
