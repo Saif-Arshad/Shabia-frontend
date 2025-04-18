@@ -76,6 +76,7 @@ const Header = () => {
                     <span>Dashboard</span>
                   </DropdownMenuItem>
                 </Link>
+                
                 <Link to="/dashboard/post">
                   <DropdownMenuItem className="cursor-pointer">
                     <User className="mr-2 h-4 w-4" />
