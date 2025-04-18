@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from "react";
-import { Clock, User, Tag, MessageCircle, ThumbsUp, Share2 } from "lucide-react";
+import { Clock, User, Tag, MessageCircle, ThumbsUp, Share2, MapPin } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/custom/Card";
 import { Badge } from "@/components/custom/Badge";
 import { Button } from "@/components/custom/Button";
@@ -32,13 +32,18 @@ const NewsCard = ({ news, onViewDetails }: any) => {
         <div className="flex items-center text-sm text-gray-500 mb-2">
           <User className="mr-1 h-3 w-3" />
           <span className="mr-3 capitalize">{news.user.name}</span>
-          <Clock className="mr-1 h-3 w-3" />
-          <span>{
-            new Date(news.createdAt).toLocaleDateString('en-US', {
-              day: 'numeric',
-              month: 'short',
-              year: 'numeric'
-            })}</span>
+    
+          <div className="flex items-center">
+            <MapPin className="h-4 w-4 mr-2 text-primary" />
+            <a
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${news.location1}, ${news.location2}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-primary hover:underline"
+            >
+              {news.location1}, {news.location2}
+            </a>
+          </div>
         </div>
         <CardTitle>{news.title}</CardTitle>
       </CardHeader>
@@ -62,7 +67,6 @@ const NewsCard = ({ news, onViewDetails }: any) => {
 };
 
 const NewsFeed = () => {
-  const [loading, setLoading] = useState(false);
   const [news, setNews] = useState([]);
   const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
 
@@ -75,12 +79,13 @@ const NewsFeed = () => {
   });
 
   const fetchNews = async () => {
-    setLoading(true);
     try {
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/news/`);
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/posts/`);
       console.log(response.data)
-      if (response.data.news) {
-        setNews(response.data.news.slice(0,3));
+      if (response.data.posts) {
+        const filteredPosts = response.data.posts.filter((post) => post.type === "NEWS");
+
+        setNews(filteredPosts);
       } else {
         setNews([]);
       }
@@ -88,7 +93,6 @@ const NewsFeed = () => {
       toast.error("Error fetching services");
       console.error(err);
     }
-    setLoading(false);
   };
   useEffect(() => {
     fetchNews()
@@ -120,16 +124,7 @@ const NewsFeed = () => {
         isOpen={isDetailDialogOpen}
         onClose={() => setIsDetailDialogOpen(false)}
       />
-      <div className="mt-12 text-center">
-        <Link to={'/news'}>
-          <Button
-            variant="outline"
-            size="lg"
-          >
-            View All News <Tag className="h-4 w-4" />
-          </Button>
-        </Link>
-      </div>
+ 
     </section>
   );
 };

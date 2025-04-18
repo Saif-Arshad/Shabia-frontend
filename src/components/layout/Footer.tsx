@@ -10,7 +10,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <div className="space-y-4">
             <Link to="/" className="inline-flex">
-              <img src="/SHABIA LOGO-01.png" alt="" className="h-24 object-contain w-auto" />
+              <img src="/2.png" alt="" className="h-16 object-contain w-auto" />
 
            
             </Link>
@@ -50,43 +50,7 @@ const Footer = () => {
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">
-              Services
-            </h3>
-            <ul className="space-y-2">
-              <li>
-                <Link
-                  to="/"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Local Businesses
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Community News
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Event Calendar
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Job Board
-                </Link>
-              </li>
-            </ul>
+          
           </div>
 
        

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React from "react";
 import { Building, MapPin, Briefcase, Clock } from "lucide-react";
@@ -19,7 +20,7 @@ interface JobDetailDialogProps {
   job: Job | null;
 }
 
-const JobDetailDialog = ({ isOpen, onClose, job }: JobDetailDialogProps) => {
+const JobDetailDialog = ({ isOpen, onClose, job }: any) => {
   if (!job) return null;
 
   return (
@@ -29,7 +30,7 @@ const JobDetailDialog = ({ isOpen, onClose, job }: JobDetailDialogProps) => {
           <DialogTitle className="text-2xl font-bold">{job.title}</DialogTitle>
           <DialogDescription className="flex items-center gap-2 mt-2">
             <Badge variant="outline" className="mr-2">
-              {job.type}
+              {job.jobType}
             </Badge>
             <Badge variant="outline">{job.category}</Badge>
           </DialogDescription>
@@ -45,8 +46,15 @@ const JobDetailDialog = ({ isOpen, onClose, job }: JobDetailDialogProps) => {
                   <span>{job.company}</span>
                 </div>
                 <div className="flex items-center">
-                  <MapPin className="h-5 w-5 mr-3 text-primary" />
-                  <span>{job.location}</span>
+                  <MapPin className="h-4 w-4 mr-2 text-primary" />
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${job.location1}, ${job.location2}`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-primary hover:underline"
+                  >
+                    {job.location1}, {job.location2}
+                  </a>
                 </div>
                 <div className="flex items-center">
                   <Briefcase className="h-5 w-5 mr-3 text-primary" />

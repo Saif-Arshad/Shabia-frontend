@@ -32,14 +32,14 @@ const Hero = () => {
         >
           <div className="inline-block mb-4">
             <span className="bg-primary/10 text-primary rounded-full px-3 py-1 text-sm font-medium">
-              Connecting Abu Dhabi Communities
+              Connecting Communities
             </span>
           </div>
           <h1 className="mb-6 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-balance">
             Discover Your <span className="text-primary">Local Community</span>
           </h1>
           <p className="mb-10 text-xl text-muted-foreground max-w-2xl mx-auto text-balance">
-            Connect with local services, stay updated with community news, find events, and discover job opportunities in Abu Dhabi.
+            Connect with local services, stay updated with community news, find events, and discover job opportunities.
           </p>
 
         

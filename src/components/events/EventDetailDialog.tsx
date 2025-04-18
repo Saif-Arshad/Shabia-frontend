@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React, { useState } from "react";
 import { Calendar, Clock, MapPin, Users } from "lucide-react";
@@ -22,7 +23,7 @@ interface EventDetailDialogProps {
   event: Event | null;
 }
 
-const EventDetailDialog = ({ isOpen, onClose, event }: EventDetailDialogProps) => {
+const EventDetailDialog = ({ isOpen, onClose, event }: any) => {
   const { user } = useAuth()
   const [loading, setLoading] = useState(false)
   if (!event) return null;
@@ -36,10 +37,11 @@ const EventDetailDialog = ({ isOpen, onClose, event }: EventDetailDialogProps) =
     }
     setLoading(true)
     try {
-      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/events/join`, {
-        eventId: event.id,
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/posts/event`, {
+        postId: event.id,
         userId: user.id
       })
+      console.log("🚀 ~ handleRSVP ~ res:", res)
       toast({
         title: "RSVP Successful!",
         description: `You have successfully registered for ${event.title}.`,
@@ -101,8 +103,15 @@ const EventDetailDialog = ({ isOpen, onClose, event }: EventDetailDialogProps) =
                   <span>{event.startTime} - {event.endTime}</span>
                 </div>
                 <div className="flex items-center">
-                  <MapPin className="h-5 w-5 mr-3 text-primary" />
-                  <span>{event.location}</span>
+                  <MapPin className="h-4 w-4 mr-2 text-primary" />
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${event.location1}, ${event.location2}`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-primary hover:underline"
+                  >
+                    {event.location1}, {event.location2}
+                  </a>
                 </div>
                 {event.participants !== undefined && (
                   <div className="flex items-center">

@@ -25,10 +25,13 @@ const EventsSection = () => {
 
   const fetchEvents = async () => {
     try {
-      const res = await fetch(`${BACKEND_URL}/events`);
+      const res = await fetch(`${BACKEND_URL}/posts`);
       if (!res.ok) throw new Error("Failed to fetch events");
       const data = await res.json();
-      setEvents(data.events.slice(0, 3));
+      const filteredPosts = data.posts.filter((post) => post.type === "EVENT");
+      console.log("🚀 ~ fetchEvents ~ filteredPosts:", filteredPosts)
+
+      setEvents(filteredPosts);
     } catch (error) {
       console.error("Error fetching events:", error);
       toast.error("Error fetching events");
@@ -57,14 +60,7 @@ const EventsSection = () => {
         ))}
       </div>
 
-      <div className="mt-8 flex justify-center">
-        <Link to="/events">
-          <Button variant="outline" className="mr-4">
-            <CalendarDays className="mr-2 h-4 w-4" />
-            View All Events
-          </Button>
-        </Link>
-      </div>
+ 
 
       <EventDetailDialog
         isOpen={isDetailOpen}

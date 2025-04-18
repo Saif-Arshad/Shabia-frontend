@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React from "react";
 import { MapPin, Phone, Clock, Mail } from "lucide-react";
@@ -10,23 +11,9 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 
-interface ServiceDetailProps {
-  service: {
-    id: number;
-    title: string;
-    category: string;
-    description: string;
-    location: string;
-    contactEmail: string;
-    contactPhone: string;
-    image: string;
-    createdBy?: number;
-  } | null;
-  isOpen: boolean;
-  onClose: () => void;
-}
 
-const ServiceDetailDialog = ({ service, isOpen, onClose }: ServiceDetailProps) => {
+
+const ServiceDetailDialog = ({ service, isOpen, onClose }: any) => {
   if (!service) return null;
 
   return (
@@ -52,9 +39,16 @@ const ServiceDetailDialog = ({ service, isOpen, onClose }: ServiceDetailProps) =
             <p className="text-gray-700">{service.description}</p>
             
             <div className="space-y-2 pt-4 border-t border-gray-200">
-              <div className="flex items-center gap-2 text-sm">
-                <MapPin className="h-4 w-4 text-primary" />
-                <span>{service.location}</span>
+              <div className="flex items-center">
+                <MapPin className="h-4 w-4 mr-2 text-primary" />
+                <a 
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${service.location1}, ${service.location2}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-primary hover:underline"
+                >
+                  {service.location1}, {service.location2}
+                </a>
               </div>
               
               <div className="flex items-center gap-2 text-sm">

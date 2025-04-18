@@ -68,19 +68,27 @@ const Header = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
+                {
+                  user.role === "ADMIN" || user.role =="MODERATOR" ? (
+
                 <Link to="/dashboard">
                   <DropdownMenuItem className="cursor-pointer">
                     <User className="mr-2 h-4 w-4" />
                     <span>Dashboard</span>
                   </DropdownMenuItem>
                 </Link>
-                
-                <Link to="/dashboard/add-post">
+
+                  )
+                  :
+
+                <Link to="/dashboard/post">
                   <DropdownMenuItem className="cursor-pointer">
                     <User className="mr-2 h-4 w-4" />
-                    <span>Add Post</span>
+                    <span>Manage Posts</span>
                   </DropdownMenuItem>
                 </Link>
+
+                }
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className="cursor-pointer text-destructive focus:text-destructive"

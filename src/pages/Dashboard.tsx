@@ -56,57 +56,7 @@ const Dashboard = () => {
                 </CardContent>
               </Card>
             </Link>
-            
-            <Link to="/dashboard/news" className="block">
-              <Card className="h-full transition-all hover:shadow-md">
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <FileText className="mr-2 h-5 w-5 text-primary" />
-                    Manage News
-                  </CardTitle>
-                  <CardDescription>Create and manage community news</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-gray-500">
-                    Add, edit, delete and publish news articles
-                  </p>
-                </CardContent>
-              </Card>
-            </Link>
-
-            <Link to="/dashboard/events" className="block">
-              <Card className="h-full transition-all hover:shadow-md">
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <CalendarDays className="mr-2 h-5 w-5 text-primary" />
-                    Manage Events
-                  </CardTitle>
-                  <CardDescription>Create and manage community events</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-gray-500">
-                    Add, edit, delete and publish community events and activities
-                  </p>
-                </CardContent>
-              </Card>
-            </Link>
-
-            <Link to="/dashboard/jobs" className="block">
-              <Card className="h-full transition-all hover:shadow-md">
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <Briefcase className="mr-2 h-5 w-5 text-primary" />
-                    Manage Jobs
-                  </CardTitle>
-                  <CardDescription>Create and manage job listings</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-gray-500">
-                    Post, edit, and delete job opportunities for the community
-                  </p>
-                </CardContent>
-              </Card>
-            </Link>
+         
           </div>
         </div>
       </main>

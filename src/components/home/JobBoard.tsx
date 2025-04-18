@@ -31,16 +31,23 @@ const JobCard = ({ job, onView }: any) => (
         </div>
         <Badge
         >
-          {job.type}
+          {job.jobType}
         </Badge>
       </div>
     </CardHeader>
     <CardContent>
       <CardDescription className="mb-4">{job.description}</CardDescription>
       <div className="space-y-2 text-sm mb-4">
-        <div className="flex items-start">
-          <MapPin className="h-4 w-4 text-muted-foreground mt-0.5 mr-2" />
-          <span>{job.location}</span>
+        <div className="flex items-center">
+          <MapPin className="h-4 w-4 mr-2 text-primary" />
+          <a
+            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${job.location1}, ${job.location2}`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-primary hover:underline"
+          >
+            {job.location1}, {job.location2}
+          </a>
         </div>
         <div className="flex items-start">
           <Briefcase className="h-4 w-4 text-muted-foreground mt-0.5 mr-2" />
@@ -70,12 +77,15 @@ const JobBoard = () => {
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const fetchJobs = async () => {
     try {
-      const response = await fetch(`${BACKEND_URL}/jobs`);
+      const response = await fetch(`${BACKEND_URL}/posts`);
       if (!response.ok) {
         throw new Error("Failed to fetch jobs");
       }
+
       const data = await response.json();
-      setJobs(data.jobs.slice(0, 3));
+      const filteredPosts = data.posts.filter((post) => post.type === "JOB");
+
+      setJobs(filteredPosts);
     } catch (error) {
       console.error("Error fetching jobs:", error);
       toast.error("Failed to fetch jobs");

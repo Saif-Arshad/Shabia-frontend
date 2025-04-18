@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React from "react";
 import { Calendar, Clock, MapPin, Users, Edit, Trash, Eye } from "lucide-react";
@@ -6,15 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Event } from "@/types/event";
 
-interface EventCardProps {
-  event: Event;
-  onEdit?: () => void;
-  onDelete?: () => void;
-  onView: () => void;
-  isManagement?: boolean;
-}
 
-const EventCard = ({ event, onEdit, onDelete, onView, isManagement = false }: EventCardProps) => {
+
+const EventCard = ({ event, onEdit, onDelete, onView, isManagement = false }: any) => {
   return (
     <Card className="group overflow-hidden relative h-full flex flex-col">
       <div className="relative h-48">
@@ -67,7 +62,14 @@ const EventCard = ({ event, onEdit, onDelete, onView, isManagement = false }: Ev
           </div>
           <div className="flex items-center">
             <MapPin className="h-4 w-4 mr-2 text-primary" />
-            <span className="line-clamp-1">{event.location}</span>
+            <a
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${event.location1}, ${event.location2}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-primary hover:underline"
+            >
+              {event.location1}, {event.location2}
+            </a>
           </div>
           {event.participants !== undefined && (
             <div className="flex items-center">
