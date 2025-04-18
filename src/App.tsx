@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -20,6 +19,7 @@ import PostsManagement from "./pages/PostsManagement";
 import JobsList from "./pages/JobsList";
 import Community from "./pages/Community";
 import Verify from "./pages/Verify";
+import AddPost from "./pages/AddPost";
 
 const queryClient = new QueryClient();
 
@@ -37,7 +37,7 @@ const App = () => (
           <Route path="/local-services" element={<LocalServices />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/services" element={<Services />} />
-          <Route path="/dashboard/post" element={<PostsManagement />} />
+          <Route path="/dashboard/add-post" element={<AddPost />} />
           <Route path="/dashboard/news" element={<NewsManagement />} />
           <Route path="/dashboard/events" element={<EventsManagement />} />
           <Route path="/dashboard/jobs" element={<JobsManagement />} />

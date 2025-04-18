@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { X, Menu, ChevronDown, User, LogOut, MessageCircle } from "lucide-react";
@@ -54,7 +53,6 @@ const Header = () => {
           <NavItem to="/community">Community</NavItem>
         </nav>
 
-        {/* Auth Buttons or User Dropdown */}
         <div className="hidden md:flex items-center space-x-4">
           {user ? (
             <DropdownMenu>
@@ -77,10 +75,10 @@ const Header = () => {
                   </DropdownMenuItem>
                 </Link>
                 
-                <Link to="/dashboard/post">
+                <Link to="/dashboard/add-post">
                   <DropdownMenuItem className="cursor-pointer">
                     <User className="mr-2 h-4 w-4" />
-                    <span>Manage Posts</span>
+                    <span>Add Post</span>
                   </DropdownMenuItem>
                 </Link>
                 <DropdownMenuSeparator />
@@ -105,7 +103,6 @@ const Header = () => {
           )}
         </div>
 
-        {/* Mobile Menu Button */}
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
             <Button
