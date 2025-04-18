@@ -20,6 +20,7 @@ const PostsManagement = () => {
     const [filterType, setFilterType] = useState("all");
     const [isDetailOpen, setIsDetailOpen] = useState(false);
     const [currentPost, setCurrentPost] = useState(null);
+    const isMODERATOR = user?.role == "MODERATOR"
 
     useEffect(() => {
         if (user) fetchPosts();
@@ -27,7 +28,14 @@ const PostsManagement = () => {
 
     const fetchPosts = async () => {
         try {
-            let url = `${BACKEND_URL}/posts/my/${user.id}`;
+            let url;
+            if (isMODERATOR) {
+
+                url = `${BACKEND_URL}/posts/`;
+            } else {
+
+                url = `${BACKEND_URL}/posts/my/${user.id}`;
+            }
             if (filterType !== "all") url += `?type=${filterType}`;
             const res = await fetch(url);
             if (!res.ok) throw new Error("Failed to fetch posts");
@@ -126,7 +134,7 @@ const PostsManagement = () => {
                                 <p className="text-sm text-foreground/80 mb-4 line-clamp-3">
                                     {post.description}
                                 </p>
-                            
+
                             </CardContent>
                         </>
                     );

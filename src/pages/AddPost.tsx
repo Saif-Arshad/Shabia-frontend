@@ -34,12 +34,7 @@ const regions = {
   ],
 };
 
-const postTypes = [
-  { id: "NEWS", label: "News Article" },
-  { id: "EVENT", label: "Event" },
-  { id: "JOB", label: "Job Posting" },
-  { id: "SERVICE", label: "Service" },
-];
+
 
 const AddPost = () => {
   const { user } = useAuth();
@@ -47,9 +42,15 @@ const AddPost = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get('id');
   const isEditing = Boolean(id);
-
+  const isUser = user?.role == "USER"
   const [selectedType, setSelectedType] = useState("NEWS");
   const [cities, setCities] = useState([]);
+  const postTypes = [
+    { id: "NEWS", label: "News Article" },
+    { id: "EVENT", label: "Event" },
+    ...(isUser ? [] : [{ id: "JOB", label: "Job Posting" }]),
+    { id: "SERVICE", label: "Service" },
+  ];
   const [imageUploading, setImageUploading] = useState(false);
   const [form, setForm] = useState({
     title: "",

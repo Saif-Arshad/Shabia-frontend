@@ -12,6 +12,8 @@ import PostsManagement from "./pages/PostsManagement";
 import Community from "./pages/Community";
 import Verify from "./pages/Verify";
 import AddPost from "./pages/AddPost";
+import Users from "./pages/users";
+import Group from "./pages/Group";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +30,8 @@ const App = () => (
           <Route path="/verify" element={<Verify />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/add-post" element={<AddPost />} />
+          <Route path="/dashboard/users" element={<Users />} />
+          <Route path="/dashboard/groups" element={<Group />} />
           <Route path="/dashboard/post" element={<PostsManagement />} />
           <Route path="/community" element={<Community />} />
           <Route path="*" element={<NotFound />} />

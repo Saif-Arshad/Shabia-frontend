@@ -10,6 +10,7 @@ import useAuth from "@/hooks/useAuth";
 
 const Dashboard = () => {
   const { user } = useAuth();
+  const isMODERATOR = user?.role == "MODERATOR"
 
   if (!user) {
     return (
@@ -36,26 +37,65 @@ const Dashboard = () => {
         <div className="container mx-auto px-4 py-8">
           <div className="mb-8">
             <h1 className="text-3xl font-bold">Welcome, {user.name}</h1>
-            <p className="text-muted-foreground">Manage your account</p>
+            <p className="text-muted-foreground">Manage Users</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Link to="/dashboard/services" className="block">
+            {
+              isMODERATOR ?
+                <Link to="/dashboard/post" className="block">
               <Card className="h-full transition-all hover:shadow-md">
                 <CardHeader>
                   <CardTitle className="flex items-center">
                     <Briefcase className="mr-2 h-5 w-5 text-primary" />
-                    Manage Services
+                    Manage Posts
                   </CardTitle>
-                  <CardDescription>View and manage your services</CardDescription>
+                  <CardDescription>View and manage users posts</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-gray-500">
-                    Add, edit, delete and view your published services
+                        Add, edit, delete and view users published posts
                   </p>
                 </CardContent>
               </Card>
             </Link>
+            :
+            <>
+            <Link to="/dashboard/users" className="block">
+              <Card className="h-full transition-all hover:shadow-md">
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Briefcase className="mr-2 h-5 w-5 text-primary" />
+                    Manage Users
+                  </CardTitle>
+                  <CardDescription>View and manage users</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-500">
+                    Add, edit, delete and view shabia users
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
+            <Link to="/dashboard/groups" className="block">
+              <Card className="h-full transition-all hover:shadow-md">
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Briefcase className="mr-2 h-5 w-5 text-primary" />
+                    Manage Groups
+                  </CardTitle>
+                        <CardDescription>View and manage your Groups</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-500">
+                          Add, edit, delete and view your published Groups
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
+            
+            </>
+            }
          
           </div>
         </div>
