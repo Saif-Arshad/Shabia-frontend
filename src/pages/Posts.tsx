@@ -1,4 +1,6 @@
+
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
 import Layout from "@/components/layout/Layout";
 import { Card, CardContent } from "@/components/ui/card";
@@ -20,7 +22,7 @@ type PostType = "news" | "events" | "jobs" | "services" | "community";
 
 interface SearchParams {
   keyword: string;
-  area: string;
+  region: string;
   city: string;
 }
 
@@ -28,10 +30,25 @@ const Posts = () => {
   const { toast } = useToast();
   const [searchParams, setSearchParams] = useState<SearchParams>({
     keyword: "",
-    area: "",
+    region: "",
     city: "",
   });
-  const [areas, setAreas] = useState<string[]>([]);
+  
+  const regions = {
+    "Abu Dhabi Region": [
+      "Abu Dhabi City", "Khalifa City", "Mohammed Bin Zayed City", "Shakhbout City",
+      "Al Shahama", "Al Bahia", "Mussafah", "Al Wathba", "Bawabat Al Sharq",
+      "Yas Island", "Saadiyat Island", "Reem Island"
+    ],
+    "Al Ain Region": [
+      "Al Yahar", "Al Hili", "Al Muwaiji", "Al Jimi", "Zakhir", "Al Faqa",
+      "Sweihan", "Al Hayer", "Shwaib"
+    ],
+    "Al Dhafra Region": [
+      "Madinat Zayed", "Liwa", "Al Silaa'", "Ghayathi", "Delma Island", "Ruwais", "Al Mirfa"
+    ],
+  };
+  
   const [cities, setCities] = useState<string[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
@@ -45,98 +62,38 @@ const Posts = () => {
   const [isNewsDialogOpen, setIsNewsDialogOpen] = useState(false);
   const [isJobDialogOpen, setIsJobDialogOpen] = useState(false);
   const [isEventDialogOpen, setIsEventDialogOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const API = import.meta.env.VITE_BACKEND_URL || "http://localhost:8000";
-
+  // Update cities when region changes
   useEffect(() => {
-    const fetchLocations = async () => {
-      try {
-        const mockAreas = ["New York", "California", "Texas", "Florida", "Illinois"];
-        const mockCities = {
-          "New York": ["New York City", "Buffalo", "Rochester"],
-          "California": ["Los Angeles", "San Francisco", "San Diego"],
-          "Texas": ["Houston", "Austin", "Dallas"],
-          "Florida": ["Miami", "Orlando", "Tampa"],
-          "Illinois": ["Chicago", "Springfield", "Peoria"]
-        };
-        
-        setAreas(mockAreas);
-        
-        if (searchParams.area) {
-          setCities(mockCities[searchParams.area as keyof typeof mockCities] || []);
-        }
-      } catch (error) {
-        console.error("Failed to fetch locations:", error);
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Failed to fetch locations. Please try again later."
-        });
-      }
-    };
+    if (searchParams.region) {
+      setCities(regions[searchParams.region as keyof typeof regions] || []);
+    } else {
+      setCities([]);
+    }
+  }, [searchParams.region]);
 
-    fetchLocations();
-  }, [searchParams.area]);
-
+  // Fetch posts from backend
   useEffect(() => {
     const fetchPosts = async () => {
+      setIsLoading(true);
       try {
-        const responses = await Promise.all([
-          fetch(`${API}/posts?type=news`).catch(() => ({ ok: false })),
-          fetch(`${API}/posts?type=events`).catch(() => ({ ok: false })),
-          fetch(`${API}/posts?type=jobs`).catch(() => ({ ok: false })),
-          fetch(`${API}/posts?type=services`).catch(() => ({ ok: false })),
-          fetch(`${API}/posts?type=community`).catch(() => ({ ok: false })),
-        ]);
-
-        const mockNews = Array(8).fill(null).map((_, i) => ({
-          id: `news-${i}`,
-          title: `News Article ${i + 1}`,
-          description: `This is a sample news article description. It contains information about local events and community updates.`,
-          image: `https://source.unsplash.com/random/300x200?news&sig=${i}`,
-          category: ["Community", "Local", "Politics"][i % 3],
-          location1: areas[i % areas.length] || "California",
-          location2: "Sample City",
-          createdAt: new Date(Date.now() - i * 86400000).toISOString(),
-          createdBy: "admin",
-        }));
-
-        const mockEvents = Array(8).fill(null).map((_, i) => ({
-          id: `event-${i}`,
-          title: `Community Event ${i + 1}`,
-          description: `Join us for this exciting community event where people gather to celebrate and connect.`,
-          image: `https://source.unsplash.com/random/300x200?event&sig=${i}`,
-          category: ["Festival", "Workshop", "Meetup"][i % 3],
-          location1: areas[i % areas.length] || "California",
-          location2: "Event Venue",
-          eventDate: new Date(Date.now() + i * 86400000).toISOString(),
-          startTime: "10:00 AM",
-          endTime: "2:00 PM",
-          createdAt: new Date(Date.now() - i * 86400000).toISOString(),
-          createdBy: "admin",
-        }));
-
-        const mockJobs = Array(8).fill(null).map((_, i) => ({
-          id: `job-${i}`,
-          title: `${["Software Developer", "Marketing Specialist", "Project Manager"][i % 3]} Position`,
-          description: `We are looking for a talented professional to join our growing team. This role offers competitive salary and benefits.`,
-          image: `https://source.unsplash.com/random/300x200?work&sig=${i}`,
-          company: ["TechCorp", "Marketing Agency", "Global Solutions"][i % 3],
-          salary: `$${60 + i * 5}k - $${80 + i * 5}k`,
-          location1: areas[i % areas.length] || "California",
-          location2: "Downtown Area",
-          createdAt: new Date(Date.now() - i * 86400000).toISOString(),
-          createdBy: "admin",
-        }));
-
-        const allPosts = [
-          ...mockNews.map(item => ({ ...item, type: 'news' })),
-          ...mockEvents.map(item => ({ ...item, type: 'events' })),
-          ...mockJobs.map(item => ({ ...item, type: 'jobs' })),
-        ];
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000'}/posts/`);
+        console.log("Fetched posts:", response.data);
         
-        setPosts(allPosts);
-        setFilteredPosts(allPosts);
+        if (response.data.posts) {
+          // Map API response to consistent format
+          const formattedPosts = response.data.posts.map((post: any) => ({
+            ...post,
+            type: post.type.toLowerCase()
+          }));
+          
+          setPosts(formattedPosts);
+          setFilteredPosts(formattedPosts);
+        } else {
+          setPosts([]);
+          setFilteredPosts([]);
+        }
       } catch (error) {
         console.error("Failed to fetch posts:", error);
         toast({
@@ -144,11 +101,15 @@ const Posts = () => {
           title: "Error",
           description: "Failed to fetch posts. Please try again later."
         });
+        setPosts([]);
+        setFilteredPosts([]);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchPosts();
-  }, [API, areas]);
+  }, [toast]);
 
   const handleSearch = () => {
     setIsSearching(true);
@@ -157,16 +118,16 @@ const Posts = () => {
     setTimeout(() => {
       const filtered = posts.filter(post => {
         const matchesKeyword = !searchParams.keyword || 
-          post.title.toLowerCase().includes(searchParams.keyword.toLowerCase()) ||
-          post.description.toLowerCase().includes(searchParams.keyword.toLowerCase());
+          post.title?.toLowerCase().includes(searchParams.keyword.toLowerCase()) ||
+          post.description?.toLowerCase().includes(searchParams.keyword.toLowerCase());
         
-        const matchesArea = !searchParams.area || 
-          post.location1.toLowerCase() === searchParams.area.toLowerCase();
+        const matchesRegion = !searchParams.region || 
+          (post.location1 && post.location1.toLowerCase() === searchParams.region.toLowerCase());
         
         const matchesCity = !searchParams.city || 
           (post.location2 && post.location2.toLowerCase() === searchParams.city.toLowerCase());
         
-        return matchesKeyword && matchesArea && matchesCity;
+        return matchesKeyword && matchesRegion && matchesCity;
       });
 
       setFilteredPosts(filtered);
@@ -179,7 +140,7 @@ const Posts = () => {
     
     const filtered = type === selectedPostType
       ? posts
-      : posts.filter(post => post.type === type);
+      : posts.filter(post => post.type === type.toLowerCase());
     
     setFilteredPosts(filtered);
   };
@@ -187,7 +148,7 @@ const Posts = () => {
   const handleInputChange = (key: keyof SearchParams, value: string) => {
     setSearchParams(prev => ({ ...prev, [key]: value }));
     
-    if (key === 'area') {
+    if (key === 'region') {
       setSearchParams(prev => ({ ...prev, city: "" }));
     }
   };
@@ -269,19 +230,19 @@ const Posts = () => {
                 
                 <div>
                   <label className="text-sm font-medium mb-1 block">
-                    Area
+                    Region
                   </label>
                   <Select 
-                    value={searchParams.area} 
-                    onValueChange={(value) => handleInputChange('area', value)}
+                    value={searchParams.region} 
+                    onValueChange={(value) => handleInputChange('region', value)}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Select an area" />
+                      <SelectValue placeholder="Select a region" />
                     </SelectTrigger>
                     <SelectContent>
-                      {areas.map(area => (
-                        <SelectItem key={area} value={area}>
-                          {area}
+                      {Object.keys(regions).map(region => (
+                        <SelectItem key={region} value={region}>
+                          {region}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -295,10 +256,10 @@ const Posts = () => {
                   <Select 
                     value={searchParams.city} 
                     onValueChange={(value) => handleInputChange('city', value)}
-                    disabled={!searchParams.area}
+                    disabled={!searchParams.region}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder={!searchParams.area ? "Select an area first" : "Select a city"} />
+                      <SelectValue placeholder={!searchParams.region ? "Select a region first" : "Select a city"} />
                     </SelectTrigger>
                     <SelectContent>
                       {cities.map(city => (
@@ -365,6 +326,13 @@ const Posts = () => {
           </Button>
         </div>
         
+        {isLoading && (
+          <div className="flex justify-center py-16">
+            <Loader className="h-12 w-12 animate-spin text-primary" />
+            <span className="sr-only">Loading posts</span>
+          </div>
+        )}
+        
         {hasSearched && isSearching && (
           <div className="flex justify-center py-16">
             <Loader className="h-12 w-12 animate-spin text-primary" />
@@ -372,17 +340,17 @@ const Posts = () => {
           </div>
         )}
         
-        {hasSearched && !isSearching && filteredPosts.length === 0 && (
+        {!isLoading && hasSearched && !isSearching && filteredPosts.length === 0 && (
           <div className="text-center py-16">
             <AlertCircle className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
             <h2 className="text-2xl font-bold mb-2">No Posts Found</h2>
             <p className="text-muted-foreground">
-              No posts are available in the selected area and city. Try broadening your search criteria.
+              No posts are available in the selected region and city. Try broadening your search criteria.
             </p>
           </div>
         )}
         
-        {(!hasSearched || (filteredPosts.length > 0 && !isSearching)) && (
+        {!isLoading && (!hasSearched || (filteredPosts.length > 0 && !isSearching)) && (
           <>
             <h2 className="text-2xl font-bold mb-6">
               {selectedPostType 
