@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -15,6 +16,7 @@ import AddPost from "./pages/AddPost";
 import Users from "./pages/users";
 import Group from "./pages/Group";
 import GroupsCommunity from "./pages/GroupsCommunity";
+import Posts from "./pages/Posts";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +31,7 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/verify" element={<Verify />} />
+          <Route path="/posts" element={<Posts />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/add-post" element={<AddPost />} />
           <Route path="/dashboard/users" element={<Users />} />

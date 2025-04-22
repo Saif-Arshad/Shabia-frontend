@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { X, Menu, ChevronDown, User, LogOut, MessageCircle } from "lucide-react";
@@ -50,6 +51,7 @@ const Header = () => {
 
         <nav className="hidden md:flex items-center space-x-8">
           <NavItem to="/">Home</NavItem>
+          <NavItem to="/posts">Posts</NavItem>
           <NavItem to="/community">Community</NavItem>
         </nav>
 
@@ -130,17 +132,8 @@ const Header = () => {
                   <NavItem to="/" className="text-base py-2" onClick={() => setIsOpen(false)}>
                     Home
                   </NavItem>
-                  <NavItem to="/local-services" className="text-base py-2" onClick={() => setIsOpen(false)}>
-                    Services
-                  </NavItem>
-                  <NavItem to="/news" className="text-base py-2" onClick={() => setIsOpen(false)}>
-                    News
-                  </NavItem>
-                  <NavItem to="/events" className="text-base py-2" onClick={() => setIsOpen(false)}>
-                    Events
-                  </NavItem>
-                  <NavItem to="/jobs" className="text-base py-2" onClick={() => setIsOpen(false)}>
-                    Jobs
+                  <NavItem to="/posts" className="text-base py-2" onClick={() => setIsOpen(false)}>
+                    Posts
                   </NavItem>
                   <NavItem to="/community" className="text-base py-2" onClick={() => setIsOpen(false)}>
                     Community
