@@ -21,6 +21,8 @@ import EventCard from "@/components/events/EventCard";
 import NewsDetailDialog from "@/components/news/NewsDetailDialog";
 import JobDetailDialog from "@/components/jobs/JobDetailDialog";
 import EventDetailDialog from "@/components/events/EventDetailDialog";
+import ServiceCard from "@/components/services/ServiceCard";
+import ServiceDetailDialog from "@/components/services/ServiceDetailDialog";
 import { Job } from "@/types/job";
 import { News } from "@/types/news";
 import { Event } from "@/types/event";
@@ -58,7 +60,9 @@ const Posts = () => {
   const [isNewsDialogOpen, setIsNewsDialogOpen] = useState(false);
   const [isJobDialogOpen, setIsJobDialogOpen] = useState(false);
   const [isEventDialogOpen, setIsEventDialogOpen] = useState(false);
+  const [isServiceDialogOpen, setIsServiceDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedService, setSelectedService] = useState<any | null>(null);
 
   /* hard‑coded UAE regions & cities */
   const regions: Record<string, string[]> = {
@@ -223,11 +227,22 @@ const Posts = () => {
             <JobCard job={post} onView={() => handleViewJob(post)} />
           </div>
         );
+      case "SERVICE":
+        return (
+          <div key={post.id} className="h-full">
+            <ServiceCard
+              service={post}
+              onViewDetails={() => {
+                setSelectedService(post);
+                setIsServiceDialogOpen(true);
+              }}
+            />
+          </div>
+        );
       default:
         return null;
     }
   };
-
 
   return (
     <Layout>
@@ -407,6 +422,11 @@ const Posts = () => {
           isOpen={isEventDialogOpen}
           onClose={() => setIsEventDialogOpen(false)}
           event={selectedEvent}
+        />
+        <ServiceDetailDialog
+          isOpen={isServiceDialogOpen}
+          onClose={() => setIsServiceDialogOpen(false)}
+          service={selectedService}
         />
       </div>
     </Layout>
