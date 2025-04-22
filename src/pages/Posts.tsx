@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import Layout from "@/components/layout/Layout";
@@ -40,7 +39,6 @@ const Posts = () => {
   const [filteredPosts, setFilteredPosts] = useState<any[]>([]);
   const [selectedPostType, setSelectedPostType] = useState<PostType | null>(null);
   
-  // Dialog states
   const [selectedNews, setSelectedNews] = useState<News | null>(null);
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
@@ -50,11 +48,9 @@ const Posts = () => {
 
   const API = import.meta.env.VITE_BACKEND_URL || "http://localhost:8000";
 
-  // Fetch areas and cities
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        // Normally we would fetch from API, but for now using mock data
         const mockAreas = ["New York", "California", "Texas", "Florida", "Illinois"];
         const mockCities = {
           "New York": ["New York City", "Buffalo", "Rochester"],
@@ -82,11 +78,9 @@ const Posts = () => {
     fetchLocations();
   }, [searchParams.area]);
 
-  // Fetch posts from all categories
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        // Mocking API calls for now
         const responses = await Promise.all([
           fetch(`${API}/posts?type=news`).catch(() => ({ ok: false })),
           fetch(`${API}/posts?type=events`).catch(() => ({ ok: false })),
@@ -95,7 +89,6 @@ const Posts = () => {
           fetch(`${API}/posts?type=community`).catch(() => ({ ok: false })),
         ]);
 
-        // Create mock data since API might not be available
         const mockNews = Array(8).fill(null).map((_, i) => ({
           id: `news-${i}`,
           title: `News Article ${i + 1}`,
@@ -161,7 +154,6 @@ const Posts = () => {
     setIsSearching(true);
     setHasSearched(true);
 
-    // Simulate API call delay
     setTimeout(() => {
       const filtered = posts.filter(post => {
         const matchesKeyword = !searchParams.keyword || 
@@ -186,7 +178,7 @@ const Posts = () => {
     setSelectedPostType(type === selectedPostType ? null : type);
     
     const filtered = type === selectedPostType
-      ? posts // If deselecting, show all posts
+      ? posts
       : posts.filter(post => post.type === type);
     
     setFilteredPosts(filtered);
@@ -195,7 +187,6 @@ const Posts = () => {
   const handleInputChange = (key: keyof SearchParams, value: string) => {
     setSearchParams(prev => ({ ...prev, [key]: value }));
     
-    // Reset city when area changes
     if (key === 'area') {
       setSearchParams(prev => ({ ...prev, city: "" }));
     }
@@ -216,7 +207,6 @@ const Posts = () => {
     setIsEventDialogOpen(true);
   };
 
-  // Render post card based on type
   const renderPostCard = (post: any) => {
     switch (post.type) {
       case 'news':
@@ -224,7 +214,7 @@ const Posts = () => {
           <div key={post.id} className="h-full">
             <NewsCard 
               news={post} 
-              onView={() => handleViewNews(post)} 
+              onViewDetails={() => handleViewNews(post)} 
             />
           </div>
         );
@@ -254,7 +244,6 @@ const Posts = () => {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8 md:py-16">
-        {/* Search Hero Section */}
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-blue-900 rounded-xl shadow-lg p-8 mb-10">
           <h1 className="text-3xl md:text-4xl font-bold mb-6 text-center">
             Discover Posts in Your Community
@@ -343,7 +332,6 @@ const Posts = () => {
           </Card>
         </div>
         
-        {/* Post Type Filter */}
         <div className="mb-8 flex flex-wrap gap-2">
           <Button 
             variant={selectedPostType === 'news' ? 'default' : 'outline'} 
@@ -377,7 +365,6 @@ const Posts = () => {
           </Button>
         </div>
         
-        {/* Search Results */}
         {hasSearched && isSearching && (
           <div className="flex justify-center py-16">
             <Loader className="h-12 w-12 animate-spin text-primary" />
@@ -395,7 +382,6 @@ const Posts = () => {
           </div>
         )}
         
-        {/* Posts Grid */}
         {(!hasSearched || (filteredPosts.length > 0 && !isSearching)) && (
           <>
             <h2 className="text-2xl font-bold mb-6">
@@ -410,7 +396,6 @@ const Posts = () => {
           </>
         )}
         
-        {/* Detail Dialogs */}
         <NewsDetailDialog
           isOpen={isNewsDialogOpen}
           onClose={() => setIsNewsDialogOpen(false)}
