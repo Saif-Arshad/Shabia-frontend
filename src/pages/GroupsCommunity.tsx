@@ -24,6 +24,10 @@ function GroupsCommunity() {
     };
 
     const handleJoinLeave = async (groupId: number, action: 'join' | 'leave') => {
+        if (!user) {
+            toast.error('Please login to join or leave a group');
+            return;
+        }
         try {
             await axios.post(`${API}/groups/${groupId}/participant`, { userId: user?.id });
             toast.success(`Successfully ${action}ed the group`);
@@ -38,6 +42,7 @@ function GroupsCommunity() {
         fetchGroups();
     }, []);
     const handleViewGroup = (group) => {
+
         if (!user) {
             toast.error('Please login to view group details');
             return;
@@ -97,7 +102,7 @@ function GroupsCommunity() {
                                         onClick={() => handleJoinLeave(group.id, 'leave')}
                                         className=" w-fit bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600 transition-colors flex items-center justify-center gap-2"
                                     >
-                                        <LogOut className='h-4 w-4'/>
+                                        <LogOut className='h-4 w-4' />
                                     </button>
                                 ) : (
                                     <button

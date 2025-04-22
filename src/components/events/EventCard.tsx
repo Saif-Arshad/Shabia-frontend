@@ -9,36 +9,45 @@ import { Event } from "@/types/event";
 
 
 
-const EventCard = ({ event, onEdit, onDelete, onView, isManagement = false }: any) => {
+const EventCard = ({ event, isPost, onEdit, onDelete, onView, isManagement = false }: any) => {
   return (
     <Card className="group overflow-hidden relative h-full flex flex-col">
-      <div className="relative h-48">
-        <img
-          src={event.image}
-          alt={event.title}
-          className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-        />
-        <div className="absolute top-2 right-2 z-20">
-          <Badge variant="outline" className="bg-white/80 backdrop-blur-sm">
-            {event.category}
-          </Badge>
-        </div>
-        {isManagement && (
-          <div className="absolute top-2 left-2 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <div className="flex gap-2">
-              <Button variant="outline" size="icon" className="w-8 h-8 rounded-full bg-white" onClick={onEdit}>
-                <Edit className="h-4 w-4" />
-              </Button>
-              <Button variant="outline" size="icon" className="w-8 h-8 rounded-full bg-white" onClick={onDelete}>
-                <Trash className="h-4 w-4 text-destructive" />
-              </Button>
-              <Button variant="outline" size="icon" className="w-8 h-8 rounded-full bg-white" onClick={onView}>
-                <Eye className="h-4 w-4" />
-              </Button>
+      {
+        !isPost ?
+          <div className="relative h-48">
+            <img
+              src={event.image}
+              alt={event.title}
+              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+            <div className="absolute top-2 right-2 z-20">
+              <Badge variant="outline" className="bg-white/80 backdrop-blur-sm">
+                {event.category}
+              </Badge>
             </div>
+            {isManagement && (
+              <div className="absolute top-2 left-2 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="flex gap-2">
+                  <Button variant="outline" size="icon" className="w-8 h-8 rounded-full bg-white" onClick={onEdit}>
+                    <Edit className="h-4 w-4" />
+                  </Button>
+                  <Button variant="outline" size="icon" className="w-8 h-8 rounded-full bg-white" onClick={onDelete}>
+                    <Trash className="h-4 w-4 text-destructive" />
+                  </Button>
+                  <Button variant="outline" size="icon" className="w-8 h-8 rounded-full bg-white" onClick={onView}>
+                    <Eye className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
-        )}
-      </div>
+          :
+          <div className="relative top-2 right-2 m-2 z-20">
+            <Badge variant="outline" className="text-white bg-primary ml-4 backdrop-blur-sm">
+              {event.category}
+            </Badge>
+          </div>
+      }
       <CardHeader className="pt-4">
         <CardTitle className="line-clamp-2">{event.title}</CardTitle>
         <CardDescription className="text-sm text-foreground/70">

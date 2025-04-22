@@ -7,14 +7,15 @@ import { Badge } from "@/components/ui/badge";
 import { Job } from "@/types/job";
 
 interface JobCardProps {
-  job: Job;
+  job: any;
   onEdit?: () => void;
   onDelete?: () => void;
   onView: () => void;
+  isPost?: boolean;
   isManagement?: boolean;
 }
 
-const JobCard = ({ job, onEdit, onDelete, onView, isManagement = false }: JobCardProps) => {
+const JobCard = ({ job, isPost, onEdit, onDelete, onView, isManagement = false }: JobCardProps) => {
   return (
     <Card className="group overflow-hidden relative h-full flex flex-col">
       <CardHeader className="pt-4">
@@ -49,7 +50,14 @@ const JobCard = ({ job, onEdit, onDelete, onView, isManagement = false }: JobCar
         <div className="space-y-1 text-sm">
           <div className="flex items-center">
             <MapPin className="h-4 w-4 mr-2 text-primary" />
-            <span className="line-clamp-1">{job.location}</span>
+            <a
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${job.location1}, ${job.location2}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-primary hover:underline"
+            >
+              {job.location1}, {job.location2}
+            </a>
           </div>
           <div className="flex items-center">
             <Briefcase className="h-4 w-4 mr-2 text-primary" />

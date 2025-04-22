@@ -11,13 +11,16 @@ interface NewsCardProps {
   news: any;
   onViewDetails?: (news: News) => void;
   isAdmin?: boolean;
+  isPost?: boolean;
   onEdit?: (news: News) => void;
   onDelete?: (newsId: number) => void;
 }
 
-const NewsCard = ({ news, onViewDetails, isAdmin = false, onEdit, onDelete }: NewsCardProps) => {
+const NewsCard = ({ news,isPost, onViewDetails, isAdmin = false, onEdit, onDelete }: NewsCardProps) => {
   return (
-    <Card className="overflow-hidden">
+    <Card className="overflow-hidden h-full">
+      {
+        !isPost ?
       <div className="relative h-48 overflow-hidden">
         <img
           src={news.image}
@@ -30,6 +33,13 @@ const NewsCard = ({ news, onViewDetails, isAdmin = false, onEdit, onDelete }: Ne
           </Badge>
         </div>
       </div>
+      :
+      <div className="relative top-4 mb-2 left-4">
+        <Badge variant="outline" className="bg-white/80 backdrop-blur-sm">
+          {news.category}
+        </Badge>
+      </div>
+      }
       <CardHeader className="pt-5">
         <div className="flex items-center text-sm text-gray-500 mb-2">
           {news.user && (

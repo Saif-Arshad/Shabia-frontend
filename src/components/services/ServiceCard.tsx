@@ -6,20 +6,29 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
 // Card for displaying a Service post, matches directory style
-const ServiceCard = ({ service, onViewDetails }: { service: any; onViewDetails: () => void }) => (
-  <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-200">
-    <div className="relative h-48 overflow-hidden">
-      <img
-        src={service.image}
-        alt={service.title}
-        className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-      />
-      <div className="absolute top-4 left-4">
-        <Badge variant="outline" className="bg-white/80 backdrop-blur-sm">
-          {service.category}
-        </Badge>
-      </div>
-    </div>
+const ServiceCard = ({ service, isPost, onViewDetails }: any) => (
+  <Card className="overflow-hidden h-full relative hover:shadow-lg transition-shadow duration-200">
+    {
+      !isPost ?
+        <div className="relative h-48 overflow-hidden">
+          <img
+            src={service.image}
+            alt={service.title}
+            className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+          />
+          <div className="absolute top-4 left-4">
+            <Badge variant="outline" className="bg-primary text-white backdrop-blur-sm">
+              {service.category}
+            </Badge>
+          </div>
+        </div>
+        :
+        <div className="relative top-4 mb-2 left-4">
+          <Badge variant="outline" className="bg-primary text-white backdrop-blur-sm">
+            {service.category}
+          </Badge>
+        </div>
+    }
     <CardHeader>
       <CardTitle>{service.title}</CardTitle>
     </CardHeader>

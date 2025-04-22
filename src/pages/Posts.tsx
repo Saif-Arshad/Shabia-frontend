@@ -212,19 +212,28 @@ const Posts = () => {
       case "NEWS":
         return (
           <div key={post.id} className="h-full">
-            <NewsCard news={post} onViewDetails={() => handleViewNews(post)} />
+            <NewsCard
+              isPost={true}
+
+              news={post} onViewDetails={() => handleViewNews(post)} />
           </div>
         );
       case "EVENT":
         return (
           <div key={post.id} className="h-full">
-            <EventCard event={post} onView={() => handleViewEvent(post)} />
+            <EventCard
+              isPost={true}
+
+              event={post} onView={() => handleViewEvent(post)} />
           </div>
         );
       case "JOB":
         return (
           <div key={post.id} className="h-full">
-            <JobCard job={post} onView={() => handleViewJob(post)} />
+            <JobCard
+              isPost={true}
+
+              job={post} onView={() => handleViewJob(post)} />
           </div>
         );
       case "SERVICE":
@@ -232,6 +241,7 @@ const Posts = () => {
           <div key={post.id} className="h-full">
             <ServiceCard
               service={post}
+              isPost={true}
               onViewDetails={() => {
                 setSelectedService(post);
                 setIsServiceDialogOpen(true);
@@ -401,7 +411,7 @@ const Posts = () => {
                   : "All Posts"}
               </h2>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 h-full bg-green-300 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {filteredPosts.map((post) => renderPostCard(post))}
               </div>
             </>
