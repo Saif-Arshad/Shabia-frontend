@@ -69,7 +69,7 @@ const Verify: React.FC = () => {
                         <div className="space-y-2">
                             <div className="text-center mb-6">
                                 <p className="text-sm text-gray-500 mb-2">
-                                    Enter the 5-digit code below
+                                    Enter the code below
                                 </p>
                                 <Input
                                     type="text"

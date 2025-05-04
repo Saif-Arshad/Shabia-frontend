@@ -63,7 +63,7 @@ const Footer = () => {
               <li className="flex">
                 <MapPin className="h-5 w-5 text-primary mr-2 flex-shrink-0" />
                 <span className="text-muted-foreground">
-                  Abu Dhabi, United Arab Emirates
+                  xzyk tzfh frho qrza
                 </span>
               </li>
               <li className="flex">
@@ -72,7 +72,7 @@ const Footer = () => {
                   href="mailto:info@abuconnect.ae"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
-                  info@abuconnect.ae
+                  Shabiacommunity@gmail.com
                 </a>
               </li>
               <li className="flex">
@@ -81,7 +81,7 @@ const Footer = () => {
                   href="tel:+97112345678"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
-                  +971 12 345 6789
+                  0562552100
                 </a>
               </li>
             </ul>

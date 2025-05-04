@@ -411,7 +411,7 @@ const Posts = () => {
                   : "All Posts"}
               </h2>
 
-              <div className="grid grid-cols-1 h-full bg-green-300 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 h-full sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {filteredPosts.map((post) => renderPostCard(post))}
               </div>
             </>
