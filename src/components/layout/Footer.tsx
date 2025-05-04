@@ -12,7 +12,7 @@ const Footer = () => {
             <Link to="/" className="inline-flex">
               <img src="/2.png" alt="" className="h-16 object-contain w-auto" />
 
-           
+
             </Link>
             <p className="text-sm text-muted-foreground">
               Connecting Abu Dhabi communities with local services, events, and job opportunities.
@@ -50,10 +50,10 @@ const Footer = () => {
           </div>
 
           <div>
-          
+
           </div>
 
-       
+
 
           <div>
             <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">
@@ -63,13 +63,13 @@ const Footer = () => {
               <li className="flex">
                 <MapPin className="h-5 w-5 text-primary mr-2 flex-shrink-0" />
                 <span className="text-muted-foreground">
-                  xzyk tzfh frho qrza
+                  Abu Dhabi, United Arab Emirates
                 </span>
               </li>
               <li className="flex">
                 <Mail className="h-5 w-5 text-primary mr-2 flex-shrink-0" />
                 <a
-                  href="mailto:info@abuconnect.ae"
+                  href="mailto:Shabiacommunity@gmail.com"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   Shabiacommunity@gmail.com
@@ -78,7 +78,7 @@ const Footer = () => {
               <li className="flex">
                 <Phone className="h-5 w-5 text-primary mr-2 flex-shrink-0" />
                 <a
-                  href="tel:+97112345678"
+                  href="tel:0562552100"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   0562552100
