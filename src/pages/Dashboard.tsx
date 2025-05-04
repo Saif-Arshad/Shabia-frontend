@@ -44,59 +44,59 @@ const Dashboard = () => {
             {
               isMODERATOR ?
                 <Link to="/dashboard/post" className="block">
-              <Card className="h-full transition-all hover:shadow-md">
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <Briefcase className="mr-2 h-5 w-5 text-primary" />
-                    Manage Posts
-                  </CardTitle>
-                  <CardDescription>View and manage users posts</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-gray-500">
+                  <Card className="h-full transition-all hover:shadow-md">
+                    <CardHeader>
+                      <CardTitle className="flex items-center">
+                        <Briefcase className="mr-2 h-5 w-5 text-primary" />
+                        Manage Posts
+                      </CardTitle>
+                      <CardDescription>View and manage users posts</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-gray-500">
                         Add, edit, delete and view users published posts
-                  </p>
-                </CardContent>
-              </Card>
-            </Link>
-            :
-            <>
-            <Link to="/dashboard/users" className="block">
-              <Card className="h-full transition-all hover:shadow-md">
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <Briefcase className="mr-2 h-5 w-5 text-primary" />
-                    Manage Users
-                  </CardTitle>
-                  <CardDescription>View and manage users</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-gray-500">
-                    Add, edit, delete and view shabia users
-                  </p>
-                </CardContent>
-              </Card>
-            </Link>
-            <Link to="/dashboard/groups" className="block">
-              <Card className="h-full transition-all hover:shadow-md">
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <Briefcase className="mr-2 h-5 w-5 text-primary" />
-                    Manage Groups
-                  </CardTitle>
+                      </p>
+                    </CardContent>
+                  </Card>
+                </Link>
+                :
+                <>
+                  <Link to="/dashboard/users" className="block">
+                    <Card className="h-full transition-all hover:shadow-md">
+                      <CardHeader>
+                        <CardTitle className="flex items-center">
+                          <Briefcase className="mr-2 h-5 w-5 text-primary" />
+                          Manage Users
+                        </CardTitle>
+                        <CardDescription>View and manage users</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-sm text-gray-500">
+                          Manage shabia users
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                  <Link to="/dashboard/groups" className="block">
+                    <Card className="h-full transition-all hover:shadow-md">
+                      <CardHeader>
+                        <CardTitle className="flex items-center">
+                          <Briefcase className="mr-2 h-5 w-5 text-primary" />
+                          Manage Groups
+                        </CardTitle>
                         <CardDescription>View and manage your Groups</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-gray-500">
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-sm text-gray-500">
                           Add, edit, delete and view your published Groups
-                  </p>
-                </CardContent>
-              </Card>
-            </Link>
-            
-            </>
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </Link>
+
+                </>
             }
-         
+
           </div>
         </div>
       </main>
